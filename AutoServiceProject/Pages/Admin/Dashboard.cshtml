@@ -1,0 +1,87 @@
+﻿@page
+@model AutoServiceProject.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h2>📊 Admin Panel - Statistikalar</h2>
+
+<div class="row text-center mb-4">
+    <div class="col-md-2">
+        <div class="card bg-primary text-white p-3">
+            <h5>İstifadəçi sayı</h5>
+            <p>@Model.UserCount</p>
+            <a href="/Admin/Users" class="btn btn-light btn-sm mt-2">View</a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-success text-white p-3">
+            <h5>Ehtiyat hissələri</h5>
+            <p>@Model.PartCount</p>
+            <a href="/Inventory" class="btn btn-light btn-sm mt-2">View</a>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-warning text-white p-3">
+            <h5>Aktiv sifarişlər</h5>
+            <p>@Model.ActiveOrders</p>
+            <a href="/Admin/OrderDetails" class="btn btn-sm btn-light mt-2">View</a>
+
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-info text-white p-3">
+            <h5>Tamamlanmış sifarişlər</h5>
+            <p>@Model.CompletedOrders</p>
+            <a href="/Admin/Orders?filter=completed" class="btn btn-light btn-sm mt-2">View</a>
+        </div>
+
+    </div>
+    <div class="col-md-2">
+        <div class="card bg-secondary text-white p-3">
+            <h5>Ustalar</h5>
+            <p>@Model.MechanicCount</p>
+            <a href="/Admin/Mechanics" class="btn btn-light btn-sm mt-2">View</a>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card bg-dark text-white p-3">
+            <h5>Toplam gəlir</h5>
+            <p>@Model.TotalRevenue.ToString("C")</p>
+            <a href="/Admin/Orders" class="btn btn-light btn-sm mt-2">View</a>
+        </div>
+    </div>
+</div>
+
+
+
+<hr />
+<h3 class="mt-4">❌ Stokda olmayan ehtiyat hissələri</h3>
+
+@if (Model.OutOfStockParts.Count == 0)
+{
+    <p class="text-success">Bütün məhsullar stokdadır.</p>
+}
+else
+{
+    <table class="table table-bordered table-sm">
+        <thead class="table-danger">
+            <tr>
+                <th>Ad</th>
+                <th>Marka</th>
+                <th>Kateqoriya</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OutOfStockParts)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Brand</td>
+                    <td>@item.Category</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

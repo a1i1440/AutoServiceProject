@@ -1,0 +1,35 @@
+﻿@page
+@model AutoServiceProject.Pages.Admin.Mechanics.CreateModel
+@{
+    ViewData["Title"] = "Add New Mechanic";
+}
+
+<h2>Add New Mechanic</h2>
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="Mechanic.FullName" class="control-label"></label>
+        <input asp-for="Mechanic.FullName" class="form-control" />
+        <span asp-validation-for="Mechanic.FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Mechanic.Age" class="control-label"></label>
+        <input asp-for="Mechanic.Age" class="form-control" />
+        <span asp-validation-for="Mechanic.Age" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Mechanic.SpecializationBrand" class="control-label"></label>
+        <input asp-for="Mechanic.SpecializationBrand" class="form-control" />
+        <span asp-validation-for="Mechanic.SpecializationBrand" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">Add</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

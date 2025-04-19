@@ -1,0 +1,34 @@
+﻿@page
+@model AutoServiceProject.Pages.Profile.MyServicesModel
+
+
+@if (Model.ServiceRequests.Count == 0)
+{
+    <p>Sizin heç bir servis müraciətiniz yoxdur.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Marka</th>
+                <th>Təsvir</th>
+                <th>Xidmət</th>
+                <th>Usta</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var req in Model.ServiceRequests)
+            {
+                <tr>
+                    <td>@req.CarBrand</td>
+                    <td>@req.Description</td>
+                    <td>@req.SelectedService</td>
+                    <td>@req.Mechanic?.FullName</td>
+                    <td>@req.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

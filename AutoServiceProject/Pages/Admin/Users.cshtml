@@ -1,0 +1,27 @@
+﻿@page
+@model AutoServiceProject.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "Users";
+}
+
+<h3>İstifadəçilər</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Email</th>
+            <th>Premium?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.FullName</td>
+                <td>@user.Email</td>
+                <td>@(user.IsPremium ? "✔️" : "❌")</td>
+            </tr>
+        }
+    </tbody>
+</table>

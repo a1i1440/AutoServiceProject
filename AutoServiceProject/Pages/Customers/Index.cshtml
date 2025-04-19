@@ -1,0 +1,36 @@
+﻿@page
+@model AutoServiceProject.Pages.Customers.IndexModel
+@{
+    ViewData["Title"] = "Müştəri Siyahısı";
+}
+
+<h2>Müştəri Siyahısı</h2>
+
+<a asp-page="Create" class="btn btn-success mb-3">+ Yeni Müştəri</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Ad Soyad</th>
+            <th>Telefon</th>
+            <th>Email</th>
+            <th>Premium</th>
+            <th>Əməliyyatlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in Model.Customers)
+        {
+            <tr>
+                <td>@customer.FullName</td>
+                <td>@customer.Phone</td>
+                <td>@customer.Email</td>
+                <td>@(customer.IsPremium ? "✔️" : "❌")</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@customer.Id" class="btn btn-sm btn-primary">Redaktə</a>
+                    <a asp-page="Delete" asp-route-id="@customer.Id" class="btn btn-sm btn-danger">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

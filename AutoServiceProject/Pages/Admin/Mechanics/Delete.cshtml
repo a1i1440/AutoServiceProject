@@ -1,0 +1,16 @@
+﻿@page "{id:int}"
+@model AutoServiceProject.Pages.Admin.Mechanics.DeleteModel
+
+<h3>Bu ustanı silmək istədiyinizə əminsiniz?</h3>
+
+<div>
+    <h4>@Model.Mechanic.FullName</h4>
+    <p>Marka: @Model.Mechanic.SpecializationBrand</p>
+    <p>Yaş: @Model.Mechanic.Age</p>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Mechanic.Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-page="./Index" class="btn btn-secondary">Ləğv et</a>
+</form>

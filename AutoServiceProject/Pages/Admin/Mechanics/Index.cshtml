@@ -1,0 +1,34 @@
+﻿@page
+@model AutoServiceProject.Pages.Admin.Mechanics.IndexModel
+@{
+    ViewData["Title"] = "Manage Mechanics";
+}
+
+<h3>Mechanics</h3>
+
+<a class="btn btn-success mb-3" asp-page="Create">Add Mechanic</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Age</th>
+            <th>Specialization Brand</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var mechanic in Model.Mechanics)
+        {
+            <tr>
+                <td>@mechanic.FullName</td>
+                <td>@mechanic.Age</td>
+                <td>@mechanic.SpecializationBrand</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-page="Edit" asp-route-id="@mechanic.Id">Edit</a>
+                    <a class="btn btn-danger btn-sm" asp-page="Delete" asp-route-id="@mechanic.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

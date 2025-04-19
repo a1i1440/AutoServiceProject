@@ -1,0 +1,53 @@
+﻿@page
+@model Store.IndexModel
+
+<h3>Spare Parts Store</h3>
+
+<form method="get" class="mb-3">
+    <label>Filter by Brand:</label>
+    <select name="Brand" onchange="this.form.submit()" class="form-select w-25">
+        <option value="">All</option>
+        <option value="BMW">BMW</option>
+        <option value="Mercedes">Mercedes</option>
+        <option value="Toyota">Toyota</option>
+    </select>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>In Stock</th>
+            <th>Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var part in Model.Parts)
+        {
+            <tr>
+                <td>@part.Name</td>
+                <td>@part.Brand</td>
+                <td>@part.Category</td>
+                <td>@part.Price.ToString("C")</td>
+                <td>@(part.InStock ? "✔️" : "❌")</td>
+                <td>
+                    @if (User.IsInRole("User") && part.Quantity > 0)
+                    {
+                        <form method="post" asp-page-handler="Order" asp-route-id="@part.Id" class="d-flex">
+                            <input type="number" name="quantity" min="1" value="1" class="form-control form-control-sm me-2" style="width: 70px;" />
+                            <button type="submit" class="btn btn-success btn-sm">Order</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No spare parts available.</p>
+                    }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

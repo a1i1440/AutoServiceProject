@@ -1,0 +1,23 @@
+﻿@page "{id:int}"
+@model AutoServiceProject.Pages.Admin.OrderDetailsModel
+
+<h3>Order Details</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>İstifadəçi</th>
+            <th>Ədəd</th>
+            <th>Part</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Order.User.FullName</td>
+            <td>@Model.Order.Quantity</td>
+            <td>@Model.Order.SparePart.Name</td>
+            <td>@Model.Order.Status</td>
+        </tr>
+    </tbody>
+</table>

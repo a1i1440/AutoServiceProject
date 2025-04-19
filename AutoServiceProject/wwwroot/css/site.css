@@ -1,0 +1,90 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Fokus effekti */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #00b894;
+}
+
+/* Bədən ölçüsü */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Arxa fon şəkli */
+.login-background {
+  background: url(/images/pngtree-silver-grey-background-image_1061951.jpg) no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Kart (login form) dizaynı */
+.login-card {
+  background-color: #2c2c2c;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  color: white;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card h3 {
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Input sahələri */
+.login-card input {
+  background: #3c3c3c;
+  border: 1px solid #555;
+  color: white;
+  border-radius: 6px;
+}
+
+.login-card input::placeholder {
+  color: #bbb;
+}
+
+/* Button dizaynı */
+.login-card .btn {
+  background-color: #858585 !important;
+  border: none;
+  color: white;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.login-card .btn:hover {
+  background-color: #858585 !important;
+}
+
+/* Link dizaynı */
+.login-card a {
+  color: #858585;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.login-card a:hover {
+  color: 858585;
+  text-decoration: underline;
+}

@@ -1,0 +1,51 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="text-white py-5" style="background: linear-gradient(to right, #00b894, #00cec9); min-height: 60vh;">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Welcome to AutoServiceProject</h1>
+        <p class="lead">Efficient. Reliable. Affordable Car Services.</p>
+        <a href="/Service/Create" class="btn btn-dark mt-4 px-4 py-2">Request a Service</a>
+    </div>
+</div>
+
+<div class="container py-5">
+    <h2 class="text-center mb-4">Our Services</h2>
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Painting</h5>
+                    <p class="card-text">Professional car painting to make your car shine like new.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Part Replacement</h5>
+                    <p class="card-text">High quality parts and certified mechanics for any replacements.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Custom Requests</h5>
+                    <p class="card-text">You describe it, we fix it. Tailored service to your needs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h4 class="mb-3">Need Help?</h4>
+        <p class="mb-4">Contact our support or browse available spare parts.</p>
+        <a href="/Store/Index" class="btn btn-outline-success">Go to Store</a>
+    </div>
+</div>

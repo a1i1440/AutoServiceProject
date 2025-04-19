@@ -1,0 +1,42 @@
+﻿@page
+@model AutoServiceProject.Pages.Admin.ServiceRequestsModel
+
+<h3>Servis Müraciətləri</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>İstifadəçi</th>
+            <th>Marka</th>
+            <th>Təsvir</th>
+            <th>Xidmət</th>
+            <th>Usta</th>
+            <th>Status</th>
+            <th>Yenilə</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var req in Model.Requests)
+        {
+            <tr>
+                <td>@req.User.FullName</td>
+                <td>@req.CarBrand</td>
+                <td>@req.Description</td>
+                <td>@req.SelectedService</td>
+                <td>@req.Mechanic.FullName</td>
+                <td>
+                    <form method="post" asp-page-handler="UpdateStatus">
+                        <input type="hidden" name="RequestId" value="@req.Id" />
+                        <select name="NewStatus" class="form-select">
+                            <option value="Gözləmədə" selected="@(req.Status == "Gözləmədə")">Gözləmədə</option>
+                            <option value="İcra olunur" selected="@(req.Status == "İcra olunur")">İcra olunur</option>
+                            <option value="Tamamlandı" selected="@(req.Status == "Tamamlandı")">Tamamlandı</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm mt-1">Yenilə</button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+﻿@page
+@model AutoServiceProject.Pages.Profile.OrdersModel
+
+
+<h3>My Orders</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Part</th>
+            <th>Quantity</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <td>@order.SparePart.Name</td>
+                <td>@order.Quantity</td>
+                <td>@order.OrderDate.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@order.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>

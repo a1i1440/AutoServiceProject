@@ -1,0 +1,46 @@
+﻿@page
+@model AutoServiceProject.Pages.Service.CreateModel
+@{
+    ViewData["Title"] = "Yeni Servis Müraciəti";
+}
+
+<h3>Yeni Servis Müraciəti</h3>
+
+<form method="post">
+    <div class="form-group">
+        <label>Avtomobil Markası</label>
+        <select asp-for="ServiceRequest.CarBrand" class="form-control">
+            @foreach (var brand in Model.Brands)
+            {
+                <option value="@brand">@brand</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Problem Təsviri</label>
+        <textarea asp-for="ServiceRequest.Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Xidmət Seçimi</label>
+        <select asp-for="ServiceRequest.SelectedService" class="form-control">
+            @foreach (var service in Model.Services)
+            {
+                <option value="@service">@service</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Usta Seç</label>
+        <select asp-for="ServiceRequest.SelectedMechanicId" class="form-control">
+            @foreach (var mechanic in Model.FilteredMechanics)
+            {
+                <option value="@mechanic.Id">@mechanic.FullName - @mechanic.SpecializationBrand</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Göndər</button>
+</form>

@@ -1,0 +1,37 @@
+﻿@page
+@model AutoServiceProject.Pages.Profile.IndexModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h2 class="card-title mb-4">👤 My Profile</h2>
+
+            @if (Model.CurrentUser != null)
+            {
+                <dl class="row">
+                    <dt class="col-sm-3">📧 Email</dt>
+                    <dd class="col-sm-9">@Model.CurrentUser.Email</dd>
+
+                    <dt class="col-sm-3">👤 Full Name</dt>
+                    <dd class="col-sm-9">@Model.CurrentUser.FullName</dd>
+
+                    <dt class="col-sm-3">💎 Is Premium</dt>
+                    <dd class="col-sm-9">
+
+                        @(Model.CurrentUser.IsPremium ? "Yes ✅" : "No ❌")
+                    </dd>
+                        <a class="btn btn-outline-primary" asp-page="Edit">Edit Profile</a>
+                    <a class="btn btn-outline-warning mt-2" asp-page="ChangePassword">Change Password</a>
+
+                </dl>
+            }
+            else
+            {
+                <div class="alert alert-warning">User info not found.</div>
+            }
+        </div>
+    </div>
+</div>

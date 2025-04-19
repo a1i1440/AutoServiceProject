@@ -1,0 +1,22 @@
+﻿@page "{id:int}"
+@model AutoServiceProject.Pages.Inventory.DetailsModel
+@{
+    ViewData["Title"] = "Part Details";
+}
+
+<h2>Part Details</h2>
+
+<div>
+    <h4>@Model.Part.Name</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Quantity</dt>
+        <dd class="col-sm-10">@Model.Part.Quantity</dd>
+
+        <dt class="col-sm-2">Price</dt>
+        <dd class="col-sm-10">@Model.Part.Price ₼</dd>
+    </dl>
+</div>
+
+<a asp-page="Edit" asp-route-id="@Model.Part.Id" class="btn btn-primary">Edit</a>
+<a asp-page="Index" class="btn btn-secondary">Back to List</a>
