@@ -29,6 +29,7 @@ namespace AutoServiceProject.Pages.Admin
         public List<SparePart> OutOfStockParts { get; set; } = new();
         public int MechanicCount { get; set; }
 
+        public decimal TotalIncome { get; set; }
 
 
         public async Task OnGetAsync()
@@ -43,9 +44,9 @@ namespace AutoServiceProject.Pages.Admin
                 .Where(p => p.Quantity == 0 || !p.InStock)
                 .ToListAsync();
 
-            TotalRevenue = await _context.Orders
-                .Where(o => o.Status == "Delivered")
-                .SumAsync(o => o.Quantity * o.SparePart.Price);
+            TotalIncome = await _context.Orders
+                .Where(o => o.Status == "Completed")
+                .SumAsync(o => o.TotalPrice);
         }
     }
 }

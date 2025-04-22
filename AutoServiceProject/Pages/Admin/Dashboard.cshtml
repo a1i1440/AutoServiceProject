@@ -4,84 +4,77 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2>📊 Admin Panel - Statistikalar</h2>
 
-<div class="row text-center mb-4">
-    <div class="col-md-2">
-        <div class="card bg-primary text-white p-3">
-            <h5>İstifadəçi sayı</h5>
-            <p>@Model.UserCount</p>
-            <a href="/Admin/Users" class="btn btn-light btn-sm mt-2">View</a>
+<div class="container py-4">
+    <h3 class="mb-4"><i class="bi bi-graph-up-arrow me-2"></i>Admin Panel - Statics</h3>
+    <div class="row g-4">
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card border border-dark shadow-sm">
+                <div class="dashboard-title">Users</div>
+                <div class="dashboard-value">1</div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-success text-white p-3">
-            <h5>Ehtiyat hissələri</h5>
-            <p>@Model.PartCount</p>
-            <a href="/Inventory" class="btn btn-light btn-sm mt-2">View</a>
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card border border-dark shadow-sm">
+                <div class="dashboard-title">Spare Parts</div>
+                <div class="dashboard-value">1</div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-warning text-white p-3">
-            <h5>Aktiv sifarişlər</h5>
-            <p>@Model.ActiveOrders</p>
-            <a href="/Admin/OrderDetails" class="btn btn-sm btn-light mt-2">View</a>
-
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card border border-dark shadow-sm">
+                <div class="dashboard-title">Total Revenue</div>
+                <div class="dashboard-value">@Model.TotalIncome.ToString("C")</div>
+            </div>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-info text-white p-3">
-            <h5>Tamamlanmış sifarişlər</h5>
-            <p>@Model.CompletedOrders</p>
-            <a href="/Admin/Orders?filter=completed" class="btn btn-light btn-sm mt-2">View</a>
-        </div>
-
-    </div>
-    <div class="col-md-2">
-        <div class="card bg-secondary text-white p-3">
-            <h5>Ustalar</h5>
-            <p>@Model.MechanicCount</p>
-            <a href="/Admin/Mechanics" class="btn btn-light btn-sm mt-2">View</a>
-        </div>
-    </div>
-
-    <div class="col-md-2">
-        <div class="card bg-dark text-white p-3">
-            <h5>Toplam gəlir</h5>
-            <p>@Model.TotalRevenue.ToString("C")</p>
-            <a href="/Admin/Orders" class="btn btn-light btn-sm mt-2">View</a>
+        <div class="col-md-4 col-lg-3">
+            <div class="dashboard-card border border-dark shadow-sm">
+                <div class="dashboard-title">Completed Orders</div>
+                <div class="dashboard-value">1</div>
+            </div>
         </div>
     </div>
 </div>
 
 
 
-<hr />
-<h3 class="mt-4">❌ Stokda olmayan ehtiyat hissələri</h3>
 
-@if (Model.OutOfStockParts.Count == 0)
-{
-    <p class="text-success">Bütün məhsullar stokdadır.</p>
-}
-else
-{
-    <table class="table table-bordered table-sm">
-        <thead class="table-danger">
-            <tr>
-                <th>Ad</th>
-                <th>Marka</th>
-                <th>Kateqoriya</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OutOfStockParts)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Brand</td>
-                    <td>@item.Category</td>
-                </tr>
+
+<hr />
+
+    <div class="col-md-6 col-lg-4">
+    <div class="dashboard-card border">
+            <canvas id="orderChart" width="300" height="300"></canvas>
+        </div>
+    </div>
+
+
+
+
+@section Scripts {
+    <script>
+        const ctx = document.getElementById('orderChart').getContext('2d');
+        const orderChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Active – @Model.ActiveOrders',
+                    'Completed – @Model.CompletedOrders'
+                ],
+                datasets: [{
+                    label: 'Orders',
+                    data: [@Model.ActiveOrders, @Model.CompletedOrders],
+                    backgroundColor: ['#f39c12', '#00cec9'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
             }
-        </tbody>
-    </table>
+        });
+    </script>
 }
+

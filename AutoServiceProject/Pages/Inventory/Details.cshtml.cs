@@ -13,6 +13,7 @@ namespace AutoServiceProject.Pages.Inventory
 
         public SparePart Part { get; set; }
 
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
             Part = await _context.Parts.FindAsync(id);
