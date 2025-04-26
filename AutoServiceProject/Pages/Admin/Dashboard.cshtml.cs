@@ -32,21 +32,38 @@ namespace AutoServiceProject.Pages.Admin
         public decimal TotalIncome { get; set; }
 
 
+        public List<decimal> MonthlyRevenue { get; set; } = new List<decimal>();
+
         public async Task OnGetAsync()
         {
-            var usersInUserRole = await _userManager.GetUsersInRoleAsync("User");
-            UserCount = usersInUserRole.Count;
-            PartCount = await _context.Parts.CountAsync();
-            MechanicCount = await _context.Mechanics.CountAsync();
-            ActiveOrders = await _context.Orders.CountAsync(o => o.Status != "Delivered");
-            CompletedOrders = await _context.Orders.CountAsync(o => o.Status == "Delivered");
-            OutOfStockParts = await _context.Parts
-                .Where(p => p.Quantity == 0 || !p.InStock)
+            var orders = await _context.Orders
+                .Where(o => o.Status == "Completed" || o.Status == "Delivered")
                 .ToListAsync();
 
+            MonthlyRevenue = Enumerable.Repeat(0m, 12).ToList();
+
+            foreach (var order in orders)
+            {
+                var date = order.OrderDate;
+                int month = date.Month;
+                MonthlyRevenue[month - 1] += order.TotalPrice;
+            }
+
+            UserCount = await _userManager.GetUsersInRoleAsync("User").ContinueWith(t => t.Result.Count);
+            PartCount = await _context.Parts.CountAsync();
             TotalIncome = await _context.Orders
-                .Where(o => o.Status == "Completed")
+                .Where(o => o.Status == "Completed" || o.Status == "Delivered")
                 .SumAsync(o => o.TotalPrice);
+
+            CompletedOrders = orders.Count;
+            ActiveOrders = await _context.Orders.CountAsync(o => o.Status == "Active");
+
+
+            TotalRevenue = TotalIncome;
         }
+
+
+
+
     }
 }

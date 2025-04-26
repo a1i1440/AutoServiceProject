@@ -11,6 +11,8 @@ namespace AutoServiceProject.Models
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public bool InStock { get; set; }
+        public string ImageUrl { get; set; }
+
     }
 
 

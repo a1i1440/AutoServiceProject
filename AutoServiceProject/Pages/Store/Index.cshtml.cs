@@ -3,6 +3,9 @@ using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AutoServiceProject.Pages.Store
 {
@@ -17,12 +20,13 @@ namespace AutoServiceProject.Pages.Store
             _userManager = userManager;
         }
 
-
-
-        public List<SparePart> Parts { get; set; }
+        public List<SparePart> Products { get; set; } = new List<SparePart>();
 
         [BindProperty(SupportsGet = true)]
         public string Brand { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Category { get; set; }
 
         public void OnGet()
         {
@@ -30,15 +34,27 @@ namespace AutoServiceProject.Pages.Store
 
             if (!string.IsNullOrEmpty(Brand))
             {
-                query = query.Where(p => p.Brand == Brand);
+                query = query.Where(p => p.Brand.Contains(Brand));
             }
 
-            Parts = query.ToList();
+            if (!string.IsNullOrEmpty(Category))
+            {
+                query = query.Where(p => p.Category.Contains(Category));
+            }
+
+            Products = query.ToList();
         }
+
         public async Task<IActionResult> OnPostOrderAsync(int id, int quantity)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Kullanýcý login deðilse login sayfasýna yönlendirebiliriz
+                return RedirectToPage("/Account/Login");
+            }
+
             var part = await _context.Parts.FindAsync(id);
-            if (part == null || quantity <= 0 || !User.Identity.IsAuthenticated)
+            if (part == null || quantity <= 0)
                 return Page();
 
             var userId = _userManager.GetUserId(User);
@@ -47,7 +63,10 @@ namespace AutoServiceProject.Pages.Store
             {
                 SparePartId = id,
                 Quantity = quantity,
-                UserId = userId
+                UserId = userId,
+                TotalPrice = part.Price * quantity,
+                Status = "Active",
+                OrderDate = DateTime.Now
             };
 
             _context.Orders.Add(order);
@@ -55,6 +74,5 @@ namespace AutoServiceProject.Pages.Store
 
             return RedirectToPage();
         }
-
     }
 }

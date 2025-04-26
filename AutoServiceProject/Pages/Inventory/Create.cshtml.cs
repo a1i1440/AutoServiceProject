@@ -2,6 +2,8 @@ using AutoServiceProject.Data;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace AutoServiceProject.Pages.Inventory
@@ -14,6 +16,9 @@ namespace AutoServiceProject.Pages.Inventory
         [BindProperty]
         public SparePart Part { get; set; }
 
+        [BindProperty]
+        public IFormFile ImageFile { get; set; }
+
         public void OnGet()
         {
         }
@@ -23,9 +28,24 @@ namespace AutoServiceProject.Pages.Inventory
             if (!ModelState.IsValid)
                 return Page();
 
-            _context.Parts.Add(Part);
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
+                var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await ImageFile.CopyToAsync(stream);
+                }
+
+               
+                Part.ImageUrl = "/images/" + fileName;
+            }
+
+            _context.Parts.Add(Part);
             await _context.SaveChangesAsync();
+
             return RedirectToPage("Index");
         }
     }
