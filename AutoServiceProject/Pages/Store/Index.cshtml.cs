@@ -24,6 +24,8 @@ namespace AutoServiceProject.Pages.Store
 
         [BindProperty(SupportsGet = true)]
         public string Brand { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string Address { get; set; }
 
         [BindProperty(SupportsGet = true)]
         public string Category { get; set; }
@@ -49,7 +51,6 @@ namespace AutoServiceProject.Pages.Store
         {
             if (!User.Identity.IsAuthenticated)
             {
-                
                 return RedirectToPage("/Account/Login");
             }
 
@@ -57,16 +58,23 @@ namespace AutoServiceProject.Pages.Store
             if (part == null || quantity <= 0)
                 return Page();
 
-            var userId = _userManager.GetUserId(User);
+            var user = await _userManager.GetUserAsync(User); 
+
+            if (user == null || string.IsNullOrEmpty(user.Address))
+            {
+                TempData["ErrorMessage"] = "Please complete your address in your profile first.";
+                return RedirectToPage("/Profile/Edit");
+            }
 
             var order = new Order
             {
                 SparePartId = id,
                 Quantity = quantity,
-                UserId = userId,
+                UserId = user.Id,
                 TotalPrice = part.Price * quantity,
                 Status = "Active",
-                OrderDate = DateTime.Now
+                OrderDate = DateTime.Now,
+                Address = user.Address
             };
 
             _context.Orders.Add(order);
@@ -74,5 +82,6 @@ namespace AutoServiceProject.Pages.Store
 
             return RedirectToPage();
         }
+
     }
 }

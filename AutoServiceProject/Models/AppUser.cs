@@ -6,6 +6,8 @@ namespace AutoServiceProject.Models
     {
         public string FullName { get; set; }
         public bool IsPremium { get; set; }
+
+        public string Address { get; set; }
     }
 
 }

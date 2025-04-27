@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Threading.Tasks;
 
 namespace AutoServiceProject.Pages.Profile
 {
@@ -21,22 +20,20 @@ namespace AutoServiceProject.Pages.Profile
 
         public class InputModel
         {
-            [Required]
-            [Display(Name = "Full Name")]
             public string FullName { get; set; }
+            public string Address { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
-            {
                 return NotFound();
-            }
 
             Input = new InputModel
             {
-                FullName = user.FullName
+                FullName = user.FullName,
+                Address = user.Address
             };
 
             return Page();
@@ -45,17 +42,15 @@ namespace AutoServiceProject.Pages.Profile
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
-            {
                 return NotFound();
-            }
 
             user.FullName = Input.FullName;
+            user.Address = Input.Address;
+
             await _userManager.UpdateAsync(user);
 
             return RedirectToPage("./Index");
