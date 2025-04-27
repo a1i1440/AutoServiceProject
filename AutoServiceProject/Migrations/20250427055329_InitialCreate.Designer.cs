@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoServiceProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250417141832_AddStatusToOrders")]
-    partial class AddStatusToOrders
+    [Migration("20250427055329_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,6 +128,30 @@ namespace AutoServiceProject.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("AutoServiceProject.Models.Mechanic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SpecializationBrand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Mechanics");
+                });
+
             modelBuilder.Entity("AutoServiceProject.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -145,6 +169,13 @@ namespace AutoServiceProject.Migrations
                     b.Property<int>("SparePartId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -156,6 +187,46 @@ namespace AutoServiceProject.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("AutoServiceProject.Models.ServiceRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CarBrand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SelectedMechanicId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SelectedService")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SelectedMechanicId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ServiceRequests");
                 });
 
             modelBuilder.Entity("AutoServiceProject.Models.SparePart", b =>
@@ -172,6 +243,9 @@ namespace AutoServiceProject.Migrations
 
                     b.Property<string>("Category")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("InStock")
@@ -410,6 +484,25 @@ namespace AutoServiceProject.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AutoServiceProject.Models.ServiceRequest", b =>
+                {
+                    b.HasOne("AutoServiceProject.Models.Mechanic", "Mechanic")
+                        .WithMany("ServiceRequests")
+                        .HasForeignKey("SelectedMechanicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoServiceProject.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Mechanic");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AutoServiceProject.Models.Vehicle", b =>
                 {
                     b.HasOne("AutoServiceProject.Models.Customer", "Customer")
@@ -490,6 +583,11 @@ namespace AutoServiceProject.Migrations
             modelBuilder.Entity("AutoServiceProject.Models.Customer", b =>
                 {
                     b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("AutoServiceProject.Models.Mechanic", b =>
+                {
+                    b.Navigation("ServiceRequests");
                 });
 
             modelBuilder.Entity("AutoServiceProject.Models.Vehicle", b =>
