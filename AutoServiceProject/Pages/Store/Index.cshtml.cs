@@ -49,7 +49,7 @@ namespace AutoServiceProject.Pages.Store
         {
             if (!User.Identity.IsAuthenticated)
             {
-                // Kullanýcý login deðilse login sayfasýna yönlendirebiliriz
+                
                 return RedirectToPage("/Account/Login");
             }
 

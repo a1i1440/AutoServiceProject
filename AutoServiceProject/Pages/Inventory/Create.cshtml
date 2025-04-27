@@ -36,16 +36,16 @@
         <input asp-for="Part.Price" class="form-control" type="number" step="0.01" min="0" />
         <span asp-validation-for="Part.Price" class="text-danger"></span>
     </div>
-    <div class="form-group">
-        <label>Upload Image</label>
-        <input type="file" class="form-control" name="ImageFile" />
-    </div>
 
+    <div class="form-group">
+        <label>Image</label>
+        <input type="file" name="ImageFile" class="form-control" />
+    </div>
     <div class="form-group form-check">
         <input asp-for="Part.InStock" class="form-check-input" />
         <label asp-for="Part.InStock" class="form-check-label"></label>
     </div>
-
+    <div asp-validation-summary="All" class="text-danger"></div>
     <button type="submit" class="btn btn-success">Save</button>
     <a asp-page="Index" class="btn btn-secondary">Cancel</a>
 </form>

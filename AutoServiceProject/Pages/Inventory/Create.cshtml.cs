@@ -2,7 +2,6 @@ using AutoServiceProject.Data;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -14,10 +13,12 @@ namespace AutoServiceProject.Pages.Inventory
         public CreateModel(AppDbContext context) => _context = context;
 
         [BindProperty]
-        public SparePart Part { get; set; }
+        public IFormFile ImageFile { get; set; }
 
         [BindProperty]
-        public IFormFile ImageFile { get; set; }
+        public SparePart Part { get; set; }
+
+
 
         public void OnGet()
         {
@@ -26,21 +27,32 @@ namespace AutoServiceProject.Pages.Inventory
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-                return Page();
-
-            if (ImageFile != null && ImageFile.Length > 0)
             {
-                
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ImageFile.FileName);
-                var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                return Page();
+            }
 
-                using (var stream = new FileStream(savePath, FileMode.Create))
+            if (ImageFile != null)
+            {
+                var fileName = Path.GetFileName(ImageFile.FileName);
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                if (!Directory.Exists(uploadsFolder))
                 {
-                    await ImageFile.CopyToAsync(stream);
+                    Directory.CreateDirectory(uploadsFolder);
                 }
 
-               
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await ImageFile.CopyToAsync(fileStream);
+                }
+
                 Part.ImageUrl = "/images/" + fileName;
+            }
+            else
+            {
+                Part.ImageUrl = "/images/default.png"; 
             }
 
             _context.Parts.Add(Part);
@@ -48,5 +60,6 @@ namespace AutoServiceProject.Pages.Inventory
 
             return RedirectToPage("Index");
         }
+
     }
 }
