@@ -22,7 +22,7 @@ namespace AutoServiceProject.Pages.Service
         public ServiceRequest ServiceRequest { get; set; }
 
         public List<string> Brands { get; set; } = new List<string> { "Toyota", "BMW", "Mercedes" };
-        public List<string> Services { get; set; } = new List<string> { "Boyama", "Parça Deyiþimi", "Diger" };
+        public List<string> Services { get; set; } = new List<string> { "Boyama", "Parça Deyiþimi", "Diger","Umumi Baxis" };
 
         public List<Mechanic> FilteredMechanics { get; set; }
 
