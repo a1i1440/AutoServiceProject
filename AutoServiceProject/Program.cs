@@ -51,7 +51,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();  
+//app.UseHttpsRedirection();  
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
@@ -95,8 +95,10 @@ using (var scope = app.Services.CreateScope())
             Email = adminEmail,
             EmailConfirmed = true,
             FullName = "Admin",
-            IsPremium = true
+            IsPremium = true,
+            Address = "Admin Address"  
         };
+
         await userManager.CreateAsync(adminUser, "Admin123!");
         await userManager.AddToRoleAsync(adminUser, "Admin");
     }

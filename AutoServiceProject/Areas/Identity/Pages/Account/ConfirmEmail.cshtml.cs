@@ -36,10 +36,10 @@ namespace AutoServiceProject.Areas.Identity.Pages.Account
 
             if (result.Succeeded)
             {
-                // 💥 Auto-login
+                
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
-                // ✅ Redirect to home
+              
                 return RedirectToPage("/Index");
             }
 

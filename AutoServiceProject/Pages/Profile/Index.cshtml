@@ -5,36 +5,91 @@
 }
 
 <div class="container mt-5">
-    <div class="card shadow-sm border-0">
-        <div class="card-body">
-            <h2 class="card-title mb-4">👤 My Profile</h2>
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+            <div class="d-flex align-items-center mb-4">
+                @if (!string.IsNullOrEmpty(Model.CurrentUser?.ProfileImageUrl))
+                {
+                    <img src="@Model.CurrentUser.ProfileImageUrl" class="rounded-circle me-3" style="width: 80px; height: 80px; object-fit: cover;" />
+                }
+                else
+                {
+                    <i class="bi bi-person-circle text-secondary display-4 me-3"></i>
+                }
+                <h2 class="mb-0 fw-bold">My Profile</h2>
+            </div>
 
             @if (Model.CurrentUser != null)
             {
-                <dl class="row">
-                    <dt class="col-sm-3">📧 Email</dt>
-                    <dd class="col-sm-9">@Model.CurrentUser.Email</dd>
+                <ul class="list-group list-group-flush mb-4">
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Email:</strong>
+                        <span>@Model.CurrentUser.Email</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Full Name:</strong>
+                        <span>@Model.CurrentUser.FullName</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Address:</strong>
+                        <span>@Model.CurrentUser.Address</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Is Premium:</strong>
+                        <span class="badge bg-@(Model.CurrentUser.IsPremium ? "success" : "secondary")">
+                            @(Model.CurrentUser.IsPremium ? "Yes" : "No")
+                        </span>
+                    </li>
+                </ul>
 
-                    <dt class="col-sm-3">👤 Full Name</dt>
-                    <dd class="col-sm-9">@Model.CurrentUser.FullName</dd>
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-page="Edit" class="btn btn-primary px-4">
+                        <i class="bi bi-pencil-square me-1"></i>Edit Profile
+                    </a>
+                    <a asp-page="ChangePassword" class="btn btn-warning text-white px-4">
+                        <i class="bi bi-shield-lock me-1"></i>Change Password
+                    </a>
 
-                    <dt class="col-sm-3">👤 Address</dt>
-                    <dd class="col-sm-9">@Model.CurrentUser.Address</dd>
-
-                    <dt class="col-sm-3">💎 Is Premium</dt>
-                    <dd class="col-sm-9">
-
-                        @(Model.CurrentUser.IsPremium ? "Yes ✅" : "No ❌")
-                    </dd>
-                        <a class="btn btn-outline-primary" asp-page="Edit">Edit Profile</a>
-                    <a class="btn btn-outline-warning mt-2" asp-page="ChangePassword">Change Password</a>
-
-                </dl>
+                    @if (string.IsNullOrEmpty(Model.CurrentUser.ProfileImageUrl))
+                    {
+                        <button class="btn btn-outline-secondary px-4" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="bi bi-upload me-1"></i>Add Profile Photo
+                        </button>
+                    }
+                </div>
             }
-            else
-            {
-                <div class="alert alert-warning">User info not found.</div>
-            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow rounded-4 border-0">
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-semibold" id="uploadModalLabel">
+                        <i class="bi bi-upload me-2 text-primary"></i> Upload Profile Photo
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <i class="bi bi-person-circle text-secondary" style="font-size: 4rem;"></i>
+                        <p class="text-muted mt-2 mb-0">Select a clear photo (JPG, PNG)</p>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" name="ProfilePhoto" class="form-control form-control-lg" accept="image/*" required>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-check-circle me-1"></i>Upload
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -51,6 +51,9 @@ namespace AutoServiceProject.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "Passwords do not match.")]
             public string ConfirmPassword { get; set; }
+            [Required]
+            [Display(Name = "Address")]
+            public string Address { get; set; }
         }
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -61,6 +64,7 @@ namespace AutoServiceProject.Areas.Identity.Pages.Account
                 {
                     UserName = Input.Email,
                     Email = Input.Email,
+                    Address = Input.Address,
                     FullName = Input.FullName,
                     EmailConfirmed = false,
                     IsPremium = false
