@@ -21,6 +21,12 @@
                             <a asp-page="DeleteOrder" asp-route-id="@order.Id" class="btn btn-danger btn-sm">Delete</a>
                         </div>
                     }
+                    @if (order.Status == "Delivered")
+                    {
+                        <div class="mt-3">
+                            <small class="text-muted">Order is delivered</small>
+                        </div>
+                    }
                     else
                     {
                         <div class="mt-3">

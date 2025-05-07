@@ -126,57 +126,19 @@
             @foreach (var product in Model.Products)
             {
                 <div class="col-6 col-md-4 col-lg-3">
-                    <form method="post" asp-page-handler="Order" class="h-100 d-flex flex-column" onsubmit="return openConfirmModal(event, this);">
-
-                        <input type="hidden" name="id" value="@product.Id" />
-                        <input type="hidden" name="quantity" value="1" />
-                        <div class="card h-100 shadow-sm">
-                            <img src="@product.ImageUrl" class="card-img-top" style="height: 150px; object-fit: contain;" alt="@product.Name">
-                            <div class="card-body d-flex flex-column">
-                                <h6 class="card-title">@product.Name</h6>
-                                <h6 class="card-title">@product.Brand</h6>
-                                <p class="card-text fw-bold mb-3">@product.Price.ToString("C")</p>
-                                <button type="submit" class="btn btn-danger mt-auto">Order Now</button>
-                            </div>
+                    <div class="border rounded shadow-sm h-100 p-3">
+                        <a asp-page="/Store/Details" asp-route-id="@product.Id">
+                            <img src="@product.ImageUrl" class="w-100" style="height: 150px; object-fit: contain;" alt="@product.Name">
+                        </a>
+                        <div class="mt-3">
+                            <h6 class="fw-bold">@product.Name</h6>
+                            <p class="text-muted mb-1">@product.Brand</p>
+                            <p class="fw-bold">@product.Price.ToString("C")</p>
+                            <a class="btn btn-outline-dark w-100" asp-page="/Store/Details" asp-route-id="@product.Id">View Details</a>
                         </div>
-                    </form>
+                    </div>
                 </div>
             }
         </div>
     </div>
 </section>
-
-<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmModalLabel">Confirm Order</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to place this order?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" id="confirmButton" class="btn btn-danger">Yes, Order</button>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
-    let currentForm = null;
-
-    function openConfirmModal(event, form) {
-        event.preventDefault(); 
-        currentForm = form; 
-        var modal = new bootstrap.Modal(document.getElementById('confirmModal'));
-        modal.show(); 
-        return false; 
-    }
-
-    document.getElementById('confirmButton').addEventListener('click', function () {
-        if (currentForm) {
-            currentForm.submit(); 
-        }
-    });
-</script>

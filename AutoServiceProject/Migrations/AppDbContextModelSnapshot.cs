@@ -197,6 +197,41 @@ namespace AutoServiceProject.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("AutoServiceProject.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("DatePosted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SparePartId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SparePartId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("AutoServiceProject.Models.ServiceRequest", b =>
                 {
                     b.Property<int>("Id")
@@ -492,6 +527,25 @@ namespace AutoServiceProject.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AutoServiceProject.Models.Review", b =>
+                {
+                    b.HasOne("AutoServiceProject.Models.SparePart", "SparePart")
+                        .WithMany("Reviews")
+                        .HasForeignKey("SparePartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoServiceProject.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SparePart");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AutoServiceProject.Models.ServiceRequest", b =>
                 {
                     b.HasOne("AutoServiceProject.Models.Mechanic", "Mechanic")
@@ -596,6 +650,11 @@ namespace AutoServiceProject.Migrations
             modelBuilder.Entity("AutoServiceProject.Models.Mechanic", b =>
                 {
                     b.Navigation("ServiceRequests");
+                });
+
+            modelBuilder.Entity("AutoServiceProject.Models.SparePart", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("AutoServiceProject.Models.Vehicle", b =>

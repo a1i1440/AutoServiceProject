@@ -12,6 +12,7 @@ namespace AutoServiceProject.Models
         public decimal Price { get; set; }
         public bool InStock { get; set; }
         public string? ImageUrl { get; set; }
+        public List<Review> Reviews { get; set; } = new();
 
 
     }

@@ -18,6 +18,8 @@ namespace AutoServiceProject.Data
         public DbSet<ServiceRecord> ServiceRecords { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
         public DbSet<Mechanic> Mechanics { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
 
     }
 }
