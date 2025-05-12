@@ -28,19 +28,27 @@ namespace AutoServiceProject.Services
             else
                 cart.Add(item);
 
+            var session = _httpContextAccessor.HttpContext.Session;
+            session.SetObjectAsJson(CartKey, cart);
+            session.SetInt32("CartCount", cart.Sum(i => i.Quantity));
             _httpContextAccessor.HttpContext.Session.SetObjectAsJson(CartKey, cart);
+            _httpContextAccessor.HttpContext.Session.SetInt32("CartCount", cart.Sum(i => i.Quantity));
         }
 
         public void RemoveFromCart(int sparePartId)
         {
             var cart = GetCartItems();
             cart.RemoveAll(i => i.SparePartId == sparePartId);
-            _httpContextAccessor.HttpContext.Session.SetObjectAsJson(CartKey, cart);
+            var session = _httpContextAccessor.HttpContext.Session;
+            session.SetObjectAsJson(CartKey, cart);
+            session.SetInt32("CartCount", cart.Sum(i => i.Quantity)); 
         }
 
         public void ClearCart()
         {
-            _httpContextAccessor.HttpContext.Session.Remove(CartKey);
+            var session = _httpContextAccessor.HttpContext.Session;
+            session.Remove(CartKey);
+            session.SetInt32("CartCount", 0); 
         }
     }
 }

@@ -2,7 +2,8 @@
 @model AutoServiceProject.Pages.Store.IndexModel
 @{
     ViewData["Title"] = "Store";
-    var cartItemCount = HttpContext.Session.GetInt32("CartCount") ?? 0;
+    var cartItemCount = CartHelper.GetCartCount(HttpContext);
+
 }
 <div id="floatingCart" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
     <a href="/Store/Cart" class="btn btn-danger rounded-circle d-flex align-items-center justify-content-center position-relative" style="width: 60px; height: 60px;">
@@ -10,11 +11,13 @@
         @if (cartItemCount > 0)
         {
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
-                @cartItemCount
+                @(cartItemCount > 9 ? "9+" : cartItemCount.ToString())
             </span>
         }
+
     </a>
 </div>
+
 <div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
 
     <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
