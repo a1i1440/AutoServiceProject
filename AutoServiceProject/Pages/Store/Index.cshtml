@@ -2,8 +2,30 @@
 @model AutoServiceProject.Pages.Store.IndexModel
 @{
     ViewData["Title"] = "Store";
+    var cartItemCount = HttpContext.Session.GetInt32("CartCount") ?? 0;
 }
+<div id="floatingCart" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+    <a href="/Store/Cart" class="btn btn-danger rounded-circle d-flex align-items-center justify-content-center position-relative" style="width: 60px; height: 60px;">
+        <i class="bi bi-cart3 fs-4 text-white"></i>
+        @if (cartItemCount > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                @cartItemCount
+            </span>
+        }
+    </a>
+</div>
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1055">
 
+    <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                ✅ Product successfully added to your cart!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 <section style="position: relative; background-image: url('/images/hero.jpg'); background-size: cover; background-position: center; height: 500px; width: 100vw; margin-left: calc(-50vw + 50%);">
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);"></div>
     <div class="d-flex flex-column align-items-center justify-content-center text-center text-white" style="position: relative; height: 100%;">
@@ -142,3 +164,17 @@
         </div>
     </div>
 </section>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var cartAdded = '@TempData["CartAdded"]';
+            if (cartAdded === 'True') {
+                var toastEl = document.getElementById('cartToast');
+                var toast = new bootstrap.Toast(toastEl);
+                toast.show();
+
+                setTimeout(() => toast.hide(), 3000); 
+            }
+        });
+    </script>
+}

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using AutoServiceProject.Services;
 
 namespace AutoServiceProject.Pages.Store
 {
@@ -11,11 +13,13 @@ namespace AutoServiceProject.Pages.Store
     {
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ICartService _cartService;
 
-        public DetailsModel(AppDbContext context, UserManager<AppUser> userManager)
+        public DetailsModel(AppDbContext context, UserManager<AppUser> userManager, ICartService cartService)
         {
             _context = context;
             _userManager = userManager;
+            _cartService = cartService;
         }
 
         public SparePart SparePart { get; set; }
@@ -70,27 +74,24 @@ namespace AutoServiceProject.Pages.Store
 
             return RedirectToPage(new { id });
         }
-        public async Task<IActionResult> OnPostOrderAsync(int id, int quantity)
+        public IActionResult OnPostOrder(int id, int quantity)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return RedirectToPage("/Account/Login", new { area = "Identity" });
-
-            var part = await _context.Parts.FindAsync(id);
+            var part = _context.Parts.FirstOrDefault(p => p.Id == id);
             if (part == null) return NotFound();
 
-            var order = new Order
+            var item = new CartItem
             {
-                UserId = user.Id,
-                SparePartId = id,
-                Quantity = quantity,
-                Address = user.Address,
-                OrderDate = DateTime.Now
+                SparePartId = part.Id,
+                Name = part.Name,
+                ImageUrl = part.ImageUrl,
+                Price = part.Price,
+                Quantity = quantity
             };
 
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("/Profile/Orders"); 
+            _cartService.AddToCart(item);
+            TempData["CartAdded"] = true;
+            return RedirectToPage(new { id });
         }
+
     }
 }

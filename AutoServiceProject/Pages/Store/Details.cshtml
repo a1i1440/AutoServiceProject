@@ -9,6 +9,31 @@
     var arrivalStart = DateTime.Now.AddDays(2).ToString("MMMM dd");
     var arrivalEnd = DateTime.Now.AddDays(14).ToString("MMMM dd");
 }
+@if (TempData["CartAdded"] != null)
+{
+    <div class="toast align-items-center text-bg-success position-fixed start-50 translate-middle-x mt-3"
+         style="top: 45px; z-index: 1055;" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                ✅ Product successfully added to your cart!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toastLive = document.querySelector('.toast');
+            const toastBootstrap = new bootstrap.Toast(toastLive);
+            toastBootstrap.show();
+
+            setTimeout(() => {
+                toastBootstrap.hide();
+            }, 3000);
+        });
+    </script>
+}
+
 
 <section class="container py-5">
     <div class="row">
