@@ -167,4 +167,20 @@ button[data-bs-target="#profileModal"]:focus {
     outline: none !important;
     box-shadow: none !important;
 }
-
+.no-hover:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background-color: inherit !important;
+    transition: none !important;
+    cursor: default;
+}
+textarea {
+    resize: none !important;
+}
+    textarea:focus,
+    input:focus,
+    select:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: #ced4da !important;
+    }

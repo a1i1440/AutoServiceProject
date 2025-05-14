@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace AutoServiceProject.Pages.Admin
@@ -18,9 +19,9 @@ namespace AutoServiceProject.Pages.Admin
         }
 
         public List<ServiceRequest> Requests { get; set; }
-
         public async Task OnGetAsync()
         {
+
             Requests = await _context.ServiceRequests
                 .Include(r => r.Mechanic)
                 .Include(r => r.User)

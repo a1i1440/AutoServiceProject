@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoServiceProject.Data;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Identity;
@@ -16,20 +17,39 @@ namespace AutoServiceProject.Pages.Service
         {
             _context = context;
             _userManager = userManager;
+            
         }
 
         [BindProperty]
         public ServiceRequest ServiceRequest { get; set; }
 
-        public List<string> Brands { get; set; } = new List<string> { "Toyota", "BMW", "Mercedes" };
-        public List<string> Services { get; set; } = new List<string> { "Boyama", "Parça Deyiþimi", "Diger","Umumi Baxis" };
+        public List<string> CarBrands { get; set; }
+        public List<string> Services { get; set; } = new List<string>
+            {
+                "Painting",
+                "Part Replacement",
+                "Oil Change",
+                "Brake Check",
+                "Tire Change",
+                "Battery Inspection",
+                "Engine Diagnostics",
+                "General Maintenance",
+                "Other"
+            };
 
         public List<Mechanic> FilteredMechanics { get; set; }
 
         public async Task OnGetAsync()
         {
+            var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/data/car-brands.json");
+            var json = System.IO.File.ReadAllText(jsonPath);
+
+            CarBrands = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
+
             FilteredMechanics = await _context.Mechanics.ToListAsync();
         }
+
+
 
         public async Task<IActionResult> OnPostAsync()
         {

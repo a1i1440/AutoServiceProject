@@ -51,10 +51,12 @@
 
 </head>
 <body class="@ViewData["BodyClass"]">
+
     @if (!(Context.Request.Path.Value.Contains("/Identity/Account/Login") || Context.Request.Path.Value.Contains("/Identity/Account/Register")))
     {
         <header>
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top shadow" style="margin-bottom: 0; border-bottom: none;">
+
                 <div class="container">
                     <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index" style="color: #FFFFFF; font-size: 1.5rem;">
                         <i class="bi bi-tools me-2"></i>AutoService
@@ -155,6 +157,7 @@
         </header>
         <div class="container">
             <main role="main" class="pb-3">
+                <div style="height: 60px;"></div>
                 @RenderBody()
             </main>
         </div>
