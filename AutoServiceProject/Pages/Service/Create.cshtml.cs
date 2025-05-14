@@ -17,7 +17,6 @@ namespace AutoServiceProject.Pages.Service
         {
             _context = context;
             _userManager = userManager;
-            
         }
 
         [BindProperty]
@@ -25,31 +24,27 @@ namespace AutoServiceProject.Pages.Service
 
         public List<string> CarBrands { get; set; }
         public List<string> Services { get; set; } = new List<string>
-            {
-                "Painting",
-                "Part Replacement",
-                "Oil Change",
-                "Brake Check",
-                "Tire Change",
-                "Battery Inspection",
-                "Engine Diagnostics",
-                "General Maintenance",
-                "Other"
-            };
+        {
+            "Painting",
+            "Part Replacement",
+            "Oil Change",
+            "Brake Check",
+            "Tire Change",
+            "Battery Inspection",
+            "Engine Diagnostics",
+            "General Maintenance",
+            "Other"
+        };
 
-        public List<Mechanic> FilteredMechanics { get; set; }
+        public List<Mechanic> FilteredMechanics { get; set; } = new List<Mechanic>();
 
         public async Task OnGetAsync()
         {
             var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/data/car-brands.json");
             var json = System.IO.File.ReadAllText(jsonPath);
-
             CarBrands = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
-
             FilteredMechanics = await _context.Mechanics.ToListAsync();
         }
-
-
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -58,7 +53,22 @@ namespace AutoServiceProject.Pages.Service
 
             _context.ServiceRequests.Add(ServiceRequest);
             await _context.SaveChangesAsync();
-            return RedirectToPage("/Profile/MyServices"); 
+
+            return RedirectToPage("/Profile/MyServices");
+        }
+
+        public JsonResult OnGetMechanicsByBrand(string brand)
+        {
+            var mechanics = _context.Mechanics
+                .Where(m => m.SpecializationBrand == brand)
+                .Select(m => new
+                {
+                    id = m.Id,
+                    name = $"{m.FullName} – {m.SpecializationBrand}"
+                })
+                .ToList();
+
+            return new JsonResult(mechanics);
         }
     }
 }

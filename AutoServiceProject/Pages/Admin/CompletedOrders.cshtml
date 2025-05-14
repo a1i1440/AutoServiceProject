@@ -1,33 +1,61 @@
 ﻿@page
 @model AutoServiceProject.Pages.Admin.CompletedOrdersModel
 
-<h3>Tamamlanmış Sifarişlər</h3>
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold mb-0">✅ Completed Orders</h3>
+        </div>
 
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>İstifadəçi</th>
-            <th>Ədəd</th>
-            <th>Part</th>
-            <th>Status</th>
-            <th>View</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model.Orders)
-        {
-            <tr>
-                <td>@order.User.FullName</td>
-                <td>@order.Quantity</td>
-                <td>@order.SparePart.Name</td>
-                <td>@order.Status</td>
-                <td>
-                    <a class="btn btn-info btn-sm" asp-page="/Admin/OrderDetails" asp-route-id="@order.Id">View</a>
-
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="card border-0 shadow-sm rounded-4 no-hover">
+            <div class="card-body p-4">
+                <table class="table table-hover text-center align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>👤 User</th>
+                            <th>⚙️ Part</th>
+                            <th>🔢 Quantity</th>
+                            <th>📌 Status</th>
+                            <th>🔄 Update</th>
+                            <th>👁 View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.Orders)
+                        {
+                            <tr>
+                                <td>@order.User</td>
+                                <td>@order.SparePart.Name</td>
+                                <td>@order.Quantity</td>
+                                <td>
+                                    <span class="badge
+                                        @(order.Status == "Pending" ? "bg-warning text-dark" :
+                                        order.Status == "Active" ? "bg-success" :
+                                        order.Status == "Completed" ? "bg-primary" : "bg-secondary")">
+                                        @order.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <form method="post" asp-page-handler="UpdateStatus">
+                                        <input type="hidden" name="OrderId" value="@order.Id" />
+                                        <div class="input-group">
+                                            <select name="NewStatus" class="form-select status-select">
+                                                <option value="Pending" selected="@(order.Status == "Pending")">Pending</option>
+                                                <option value="Active" selected="@(order.Status == "Active")">Active</option>
+                                                <option value="Completed" selected="@(order.Status == "Completed")">Completed</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-outline-primary">Update</button>
+                                        </div>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a asp-page="/Admin/OrderDetails" asp-route-id="@order.Id" class="btn btn-info">View</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

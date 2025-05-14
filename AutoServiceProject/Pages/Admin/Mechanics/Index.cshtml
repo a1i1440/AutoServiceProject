@@ -1,34 +1,45 @@
 ﻿@page
 @model AutoServiceProject.Pages.Admin.Mechanics.IndexModel
 @{
-    ViewData["Title"] = "Manage Mechanics";
+    ViewData["Title"] = "Mechanics";
 }
 
-<h3>Mechanics</h3>
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold mb-0">🔧 Mechanics</h3>
+            <a href="/Admin/Mechanics/Create" class="btn btn-dark px-4 py-2 rounded-3 shadow-sm">➕ Add Mechanic</a>
 
-<a class="btn btn-success mb-3" asp-page="Create">Add Mechanic</a>
+        </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Full Name</th>
-            <th>Age</th>
-            <th>Specialization Brand</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var mechanic in Model.Mechanics)
-        {
-            <tr>
-                <td>@mechanic.FullName</td>
-                <td>@mechanic.Age</td>
-                <td>@mechanic.SpecializationBrand</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" asp-page="Edit" asp-route-id="@mechanic.Id">Edit</a>
-                    <a class="btn btn-danger btn-sm" asp-page="Delete" asp-route-id="@mechanic.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="card border-0 shadow-sm rounded-4 no-hover">
+            <div class="card-body p-4">
+                <table class="table table-striped table-hover align-middle text-center mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>👤 Full Name</th>
+                            <th>🎂 Age</th>
+                            <th>🚗 Specialization Brand</th>
+                            <th>⚙ Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var mechanic in Model.Mechanics)
+                        {
+                            <tr>
+                                <td>@mechanic.FullName</td>
+                                <td>@mechanic.Age</td>
+                                <td>@mechanic.SpecializationBrand</td>
+                                <td>
+                                    <a asp-page="/Admin/Mechanics/Edit" asp-route-id="@mechanic.Id" class="btn btn-warning">Edit</a>
+                                    <a asp-page="/Admin/Mechanics/Delete" asp-route-id="@mechanic.Id" class="btn btn-danger">Delete</a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>

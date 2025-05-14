@@ -78,7 +78,7 @@ body {
 }
 
 .login-card a:hover {
-  color: 858585;
+  color: #858585;
   text-decoration: underline;
 }
 .card {
@@ -184,3 +184,18 @@ textarea {
         box-shadow: none !important;
         border-color: #ced4da !important;
     }
+
+.status-pending {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+}
+
+.status-active {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+.status-completed {
+    background-color: #cce5ff !important;
+    color: #004085 !important;
+}

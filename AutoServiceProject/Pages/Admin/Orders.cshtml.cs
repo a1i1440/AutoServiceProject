@@ -25,11 +25,12 @@ namespace AutoServiceProject.Pages.Admin
         public async Task OnGetAsync()
         {
             Orders = await _context.Orders
+                .Where(o => o.Status == "Active")
                 .Include(o => o.User)
                 .Include(o => o.SparePart)
-                .Where(o => o.Status != "Delivered") 
                 .ToListAsync();
         }
+
 
 
         public async Task<IActionResult> OnPostAsync(int orderId, string newStatus)

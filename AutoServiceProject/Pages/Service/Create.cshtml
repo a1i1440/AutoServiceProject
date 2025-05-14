@@ -17,6 +17,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Car Brand</label>
                                 <select asp-for="ServiceRequest.CarBrand" class="form-select">
+                                    <option value="">-- Select Brand --</option>
                                     @foreach (var brand in Model.CarBrands)
                                     {
                                         <option value="@brand">@brand</option>
@@ -42,11 +43,16 @@
                             <div class="mb-4">
                                 <label class="form-label">Choose Mechanic</label>
                                 <select asp-for="ServiceRequest.SelectedMechanicId" class="form-select">
+                                    <option value="">-- Select Mechanic --</option>
                                     @foreach (var mechanic in Model.FilteredMechanics)
                                     {
-                                        <option value="@mechanic.Id">@mechanic.FullName – @mechanic.SpecializationBrand</option>
+                                        <option value="@mechanic.Id" data-brand="@mechanic.SpecializationBrand">
+                                            @mechanic.FullName – @mechanic.SpecializationBrand
+                                        </option>
+
                                     }
                                 </select>
+
                             </div>
 
                             <button type="submit" class="btn btn-danger w-100">
@@ -59,3 +65,52 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        const carBrandSelect = document.getElementById("ServiceRequest_CarBrand");
+        const mechanicSelect = document.getElementById("ServiceRequest_SelectedMechanicId");
+
+        carBrandSelect.addEventListener("change", function () {
+            const brand = this.value;
+
+            fetch(`/Service/Create?handler=MechanicsByBrand&brand=${brand}`)
+                .then(response => response.json())
+                .then(data => {
+                    mechanicSelect.innerHTML = "";
+
+                    if (data.length === 0) {
+                        mechanicSelect.disabled = true;
+
+                        const opt = document.createElement("option");
+                        opt.text = "No available mechanic for that brand";
+                        opt.disabled = true;
+                        opt.selected = true;
+                        mechanicSelect.appendChild(opt);
+                    } else {
+                        mechanicSelect.disabled = false;
+
+                        data.forEach(m => {
+                            const opt = document.createElement("option");
+                            opt.value = m.id;
+                            opt.text = m.name;
+                            mechanicSelect.appendChild(opt);
+                        });
+                    }
+                });
+        });
+
+        mechanicSelect.addEventListener("change", function () {
+            const selectedOption = mechanicSelect.options[mechanicSelect.selectedIndex];
+            const brand = selectedOption.getAttribute("data-brand");
+
+            if (brand) {
+                carBrandSelect.value = brand;
+                carBrandSelect.dispatchEvent(new Event("change"));
+            }
+        });
+    </script>
+}
+
+
+

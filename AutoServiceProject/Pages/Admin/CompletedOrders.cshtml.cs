@@ -24,7 +24,7 @@ namespace AutoServiceProject.Pages.Admin
             Orders = await _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.SparePart)
-                .Where(o => o.Status == "Delivered")
+                .Where(o => o.Status == "Completed")
                 .ToListAsync();
         }
     }

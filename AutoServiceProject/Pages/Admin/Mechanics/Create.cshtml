@@ -4,32 +4,42 @@
     ViewData["Title"] = "Add New Mechanic";
 }
 
-<h2>Add New Mechanic</h2>
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm border-0 rounded-4 no-hover">
+                    <div class="card-header bg-dark text-white text-center rounded-top-4">
+                        <h4 class="mb-0">➕ Add New Mechanic</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="mb-3">
+                                <label for="FullName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="FullName" name="Mechanic.FullName" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="Age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="Age" name="Mechanic.Age" min="18" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="SpecializationBrand" class="form-label">Specialized Brand</label>
+                                <select asp-for="Mechanic.SpecializationBrand" class="form-select">
+                                    @foreach (var brand in Model.CarBrands)
+                                    {
+                                        <option value="@brand">@brand</option>
+                                    }
+                                </select>
 
-<form method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="form-group">
-        <label asp-for="Mechanic.FullName" class="control-label"></label>
-        <input asp-for="Mechanic.FullName" class="form-control" />
-        <span asp-validation-for="Mechanic.FullName" class="text-danger"></span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary w-50">Save</button>
+                                <a href="/Admin/Mechanics/Index" class="btn btn-outline-secondary w-25">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Mechanic.Age" class="control-label"></label>
-        <input asp-for="Mechanic.Age" class="form-control" />
-        <span asp-validation-for="Mechanic.Age" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Mechanic.SpecializationBrand" class="control-label"></label>
-        <input asp-for="Mechanic.SpecializationBrand" class="form-control" />
-        <span asp-validation-for="Mechanic.SpecializationBrand" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success mt-2">Add</button>
-</form>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+</section>
