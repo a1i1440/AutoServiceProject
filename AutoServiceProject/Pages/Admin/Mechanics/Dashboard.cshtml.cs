@@ -15,8 +15,9 @@ namespace AutoServiceProject.Pages.Mechanic
     {
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IHubContext<ServiceRequestHub> _hubContext;
-        public DashboardModel(AppDbContext context, UserManager<AppUser> userManager, IHubContext<ServiceRequestHub> hubContext)
+        private readonly IHubContext<AppHub> _hubContext;
+
+        public DashboardModel(AppDbContext context, UserManager<AppUser> userManager, IHubContext<AppHub> hubContext)
         {
             _context = context;
             _userManager = userManager;
@@ -48,6 +49,15 @@ namespace AutoServiceProject.Pages.Mechanic
                 request.MechanicUserId = userId;
                 request.Status = "In Progress";
                 await _context.SaveChangesAsync();
+
+                await _hubContext.Clients.All.SendAsync("StatusChanged", new Dictionary<string, object>
+                        {
+                            { "RequestId", request.Id },
+                            { "NewStatus", "In Progress" }
+                        });
+
+
+
             }
 
             return RedirectToPage();
@@ -63,11 +73,17 @@ namespace AutoServiceProject.Pages.Mechanic
                 request.Status = "Completed";
                 await _context.SaveChangesAsync();
 
-                await _hubContext.Clients.All.SendAsync("ServiceRequestStatusChanged", request.Id, "Completed");
+                await _hubContext.Clients.All.SendAsync("StatusChanged", new Dictionary<string, object>
+                    {
+                        { "RequestId", request.Id },
+                        { "NewStatus", "Completed" }
+                    });
+
             }
 
             return RedirectToPage();
         }
+
 
     }
 }

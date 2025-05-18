@@ -25,6 +25,7 @@ namespace AutoServiceProject.Pages.Profile
 
             Requests = await _context.ServiceRequests
                 .Include(r => r.Mechanic)
+                 .Include(r => r.MechanicUser)
                 .Where(r => r.UserId == userId)
                 .OrderByDescending(r => r.RequestDate)
                 .ToListAsync();

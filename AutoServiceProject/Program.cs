@@ -5,6 +5,7 @@ using AutoServiceProject.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using AutoServiceProject.Data;
+using AutoServiceProject.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,9 +68,9 @@ app.Use(async (context, next) =>
 });
 
 
-
+app.MapHub<AppHub>("/apphub");
 app.MapRazorPages();
-app.MapHub<AutoServiceProject.Hubs.ServiceRequestHub>("/servicerequesthub");
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -159,7 +160,6 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(normalUser, "User");
     }
 }
-
 
 
 app.Run();

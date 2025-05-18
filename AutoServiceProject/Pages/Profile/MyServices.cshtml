@@ -81,31 +81,71 @@
     </div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
-<script>
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/servicerequesthub")
-        .build();
+<div aria-live="polite" aria-atomic="true" class="position-absolute top-0 start-50 translate-middle-x p-3" style="z-index: 9999; margin-top: 80px;">
+    <div id="statusToast" class="toast align-items-center text-white bg-success border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="statusToastBody">
+                Status updated!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
 
-    connection.on("ServiceRequestStatusChanged", function (requestId, newStatus) {
-        const card = document.getElementById("request-" + requestId);
-        if (card) {
-            const statusCell = card.querySelector(".status-cell");
-            if (statusCell) {
+
+
+@section Scripts {
+    <script>
+        window.addEventListener("SignalRReady", () => {
+            globalConnection.on("StatusChanged", function (data) {
+                const requestId = data.RequestId;
+                const newStatus = data.NewStatus;
+
+                console.log("✅ StatusChanged event:", data);
+
+                const card = document.getElementById("request-" + requestId);
+                if (!card) {
+                    console.warn("❌ Card not found with ID:", requestId);
+                    return;
+                }
+
+                const statusCell = card.querySelector(".status-cell");
+                if (!statusCell) {
+                    console.warn("❌ .status-cell not found in card:", requestId);
+                    return;
+                }
+
                 let badgeHtml = "";
+                let toastMessage = "";
+
                 if (newStatus === "Pending") {
                     badgeHtml = '<span class="badge bg-warning text-dark">Pending</span>';
+                    toastMessage = `✔ Request #${requestId} is pending`;
                 } else if (newStatus === "In Progress") {
                     badgeHtml = '<span class="badge bg-primary">In Progress</span>';
+                    toastMessage = `✔ Your request #${requestId} has been accepted`;
                 } else if (newStatus === "Completed") {
                     badgeHtml = '<span class="badge bg-success">Completed</span>';
-                } else {
-                    badgeHtml = newStatus;
+                    toastMessage = `✔ Your request #${requestId} has been completed`;
                 }
-                statusCell.innerHTML = `<strong>🎯 Status:</strong> ` + badgeHtml;
-            }
-        }
-    });
 
-    connection.start().catch(err => console.error(err.toString()));
-</script>
+                statusCell.innerHTML = `<strong>🎯 Status:</strong> ` + badgeHtml;
+                showToast(toastMessage);
+            });
+        });
+
+        function showToast(message) {
+            console.log("📢 Toast message:", message);
+            const toastBody = document.getElementById("statusToastBody");
+            toastBody.innerText = message;
+
+            const toastElement = document.getElementById("statusToast");
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+    </script>
+}
+
+
+
+

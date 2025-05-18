@@ -16,9 +16,9 @@ namespace AutoServiceProject.Pages.Service
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
 
-        private readonly IHubContext<ServiceRequestHub> _hubContext;
+        private readonly IHubContext<AppHub> _hubContext;
 
-        public CreateModel(AppDbContext context, UserManager<AppUser> userManager, IHubContext<ServiceRequestHub> hubContext)
+        public CreateModel(AppDbContext context, UserManager<AppUser> userManager, IHubContext<AppHub> hubContext)
         {
             _context = context;
             _userManager = userManager;
@@ -59,11 +59,21 @@ namespace AutoServiceProject.Pages.Service
             var user = await _userManager.GetUserAsync(User);
             ServiceRequest.UserId = user.Id;
             ServiceRequest.RequestDate = DateTime.Now;
+
             _context.ServiceRequests.Add(ServiceRequest);
             await _context.SaveChangesAsync();
-            await _hubContext.Clients.All.SendAsync("NewServiceRequest");
+
+            await _hubContext.Clients.All.SendAsync("NewServiceRequest", new
+            {
+                Id = ServiceRequest.Id,
+                CarBrand = ServiceRequest.CarBrand,
+                Description = ServiceRequest.Description,
+                Status = ServiceRequest.Status
+            });
+
             return RedirectToPage("/Profile/MyServices");
         }
+
 
         public JsonResult OnGetMechanicsByBrand(string brand)
         {

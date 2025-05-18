@@ -270,6 +270,23 @@
 
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/js/site.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+
+    <script>
+        window.globalConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/apphub")
+            .build();
+
+        globalConnection.start()
+            .then(() => {
+                console.log("✅ Connected to AppHub");
+                window.dispatchEvent(new Event("SignalRReady")); 
+            })
+            .catch(err => console.error("❌ SignalR start error:", err));
+    </script>
+
+
+
 
 
 </body>
