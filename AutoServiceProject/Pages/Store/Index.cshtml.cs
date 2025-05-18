@@ -74,7 +74,7 @@ namespace AutoServiceProject.Pages.Store
                 TotalPrice = part.Price * quantity,
                 Status = "Active",
                 OrderDate = DateTime.Now,
-                Address = user.Address
+                Address = "Default Address"
             };
 
             _context.Orders.Add(order);

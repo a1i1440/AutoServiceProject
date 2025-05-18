@@ -12,7 +12,7 @@ public class Order
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public string Status { get; set; } = "Pending";
     public decimal TotalPrice { get; set; }
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
     }
 

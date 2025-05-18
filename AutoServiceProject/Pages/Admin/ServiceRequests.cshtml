@@ -1,42 +1,72 @@
 ﻿@page
 @model AutoServiceProject.Pages.Admin.ServiceRequestsModel
+@{
+    ViewData["Title"] = "Service Requests";
+}
 
-<h3>Service Requests</h3>
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4"><i class="bi bi-list-check"></i> Service Requests</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>User</th>
-            <th>Brand</th>
-            <th>Description</th>
-            <th>Service</th>
-            <th>Mechanic</th>
-            <th>Status</th>
-            <th>Update</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var req in Model.Requests)
+        @if (Model.Requests.Any())
         {
-            <tr>
-                <td>@req.User.FullName</td>
-                <td>@req.CarBrand</td>
-                <td>@req.Description</td>
-                <td>@req.SelectedService</td>
-                <td>@req.Mechanic.FullName</td>
-                <td>
-                    <form method="post" asp-page-handler="UpdateStatus">
-                        <input type="hidden" name="RequestId" value="@req.Id" />
-                        <select name="NewStatus" class="form-select">
-                            <option value="Gözləmədə" selected="@(req.Status == "Gözləmədə")">Gözləmədə</option>
-                            <option value="İcra olunur" selected="@(req.Status == "İcra olunur")">İcra olunur</option>
-                            <option value="Tamamlandı" selected="@(req.Status == "Tamamlandı")">Tamamlandı</option>
-                        </select>
-                        <button type="submit" class="btn btn-primary btn-sm mt-1">Refresh</button>
-                    </form>
-                </td>
-
-            </tr>
+            <div class="table-responsive">
+                <table class="table table-bordered border-secondary">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>User</th>
+                            <th>Brand</th>
+                            <th>Description</th>
+                            <th>Service</th>
+                            <th>Mechanic</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        @foreach (var r in Model.Requests)
+                        {
+                            <tr style="background-color: #f9f9f9;">
+                                <td>@r.User.FullName</td>
+                                <td>@r.CarBrand</td>
+                                <td>@r.Description</td>
+                                <td>@r.SelectedService</td>
+                                <td>
+                                    @if (r.MechanicUser != null)
+                                    {
+                                        @r.MechanicUser.FullName
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">Unassigned</span>
+                                    }
+                                </td>
+                                <td>@r.RequestDate.ToShortDateString()</td>
+                                <td>
+                                    @if (r.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (r.Status == "In Progress")
+                                    {
+                                        <span class="badge bg-primary">In Progress</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Completed</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
-    </tbody>
-</table>
+        else
+        {
+            <div class="alert alert-info text-center">
+                No service requests found.
+            </div>
+        }
+    </div>
+</section>
