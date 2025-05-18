@@ -13,5 +13,10 @@ namespace AutoServiceProject.Hubs
         {
             await Clients.All.SendAsync(method, message);
         }
+
+        public async Task BroadcastOrderStatusChange(int orderId, string newStatus)
+        {
+            await Clients.All.SendAsync("OrderStatusChanged", new { OrderId = orderId, NewStatus = newStatus });
+        }
     }
 }
