@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using MechanicModel = AutoServiceProject.Models.Mechanic;
 namespace AutoServiceProject.Pages.Admin.Mechanics
 {
     public class CreateModel : PageModel
@@ -17,7 +17,7 @@ namespace AutoServiceProject.Pages.Admin.Mechanics
         }
 
         [BindProperty]
-        public Mechanic Mechanic { get; set; }
+        public MechanicModel Mechanic { get; set; }
         public List<string> CarBrands { get; set; }
         public void OnGet()
         {

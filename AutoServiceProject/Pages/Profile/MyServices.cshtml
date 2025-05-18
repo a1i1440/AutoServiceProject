@@ -1,34 +1,111 @@
 ﻿@page
 @model AutoServiceProject.Pages.Profile.MyServicesModel
-
-
-@if (Model.ServiceRequests.Count == 0)
-{
-    <p>Sizin heç bir servis müraciətiniz yoxdur.</p>
+@{
+    ViewData["Title"] = "My Service Requests";
 }
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Marka</th>
-                <th>Təsvir</th>
-                <th>Xidmət</th>
-                <th>Usta</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var req in Model.ServiceRequests)
-            {
-                <tr>
-                    <td>@req.CarBrand</td>
-                    <td>@req.Description</td>
-                    <td>@req.SelectedService</td>
-                    <td>@req.Mechanic?.FullName</td>
-                    <td>@req.Status</td>
-                </tr>
+
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4"><i class="bi bi-clipboard2-check"></i> My Service Requests</h2>
+
+        @if (Model.Requests.Any())
+        {
+            <div class="row g-4">
+                @foreach (var r in Model.Requests)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card shadow-sm rounded-4 border-5 h-100" id="request-@r.Id">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">
+                                    <span class="text-dark"><i class="bi bi-car-front"></i> @r.CarBrand</span>
+                                </h5>
+
+                                <p class="mb-2"><strong>🔧 Problem:</strong> @r.Description</p>
+                                <p class="mb-2"><strong>🛠️ Service:</strong> @r.SelectedService</p>
+                                <p class="mb-2"><strong>📅 Date:</strong> @r.RequestDate.ToShortDateString()</p>
+
+                                <p class="mb-2 status-cell">
+                                    <strong>🎯 Status:</strong>
+                                    @if (r.Status == "Pending")
+                                    {
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    }
+                                    else if (r.Status == "In Progress")
+                                    {
+                                        <span class="badge bg-primary">In Progress</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Completed</span>
+                                    }
+                                </p>
+
+                                <p class="mb-1">
+                                    <strong>🧰 Selected Mechanic:</strong>
+                                    @if (r.Mechanic != null)
+                                    {
+                                        <span>@r.Mechanic.FullName (@r.Mechanic.SpecializationBrand)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">Not Selected</span>
+                                    }
+                                </p>
+
+                                <p class="mb-0">
+                                    <strong>🧑 Assigned Mechanic:</strong>
+                                    @if (r.MechanicUser != null)
+                                    {
+                                        <span>@r.MechanicUser.FullName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">Not Assigned</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+                <div class="text-center">
+                    <i class="bi bi-inboxes fs-1 text-secondary mb-3"></i>
+                    <h4 class="text-muted">No Service Requests</h4>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/servicerequesthub")
+        .build();
+
+    connection.on("ServiceRequestStatusChanged", function (requestId, newStatus) {
+        const card = document.getElementById("request-" + requestId);
+        if (card) {
+            const statusCell = card.querySelector(".status-cell");
+            if (statusCell) {
+                let badgeHtml = "";
+                if (newStatus === "Pending") {
+                    badgeHtml = '<span class="badge bg-warning text-dark">Pending</span>';
+                } else if (newStatus === "In Progress") {
+                    badgeHtml = '<span class="badge bg-primary">In Progress</span>';
+                } else if (newStatus === "Completed") {
+                    badgeHtml = '<span class="badge bg-success">Completed</span>';
+                } else {
+                    badgeHtml = newStatus;
+                }
+                statusCell.innerHTML = `<strong>🎯 Status:</strong> ` + badgeHtml;
             }
-        </tbody>
-    </table>
-}
+        }
+    });
+
+    connection.start().catch(err => console.error(err.toString()));
+</script>

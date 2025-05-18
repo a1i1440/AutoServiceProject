@@ -1,31 +1,33 @@
 using AutoServiceProject.Data;
 using AutoServiceProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace AutoServiceProject.Pages.Profile
+namespace AutoServiceProject.Pages.Mechanic
 {
-    public class MyServicesModel : PageModel
+    [Authorize(Roles = "Mechanic")]
+    public class CompletedModel : PageModel
     {
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
 
-        public MyServicesModel(AppDbContext context, UserManager<AppUser> userManager)
+        public CompletedModel(AppDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        public List<ServiceRequest> Requests { get; set; }
+        public List<ServiceRequest> CompletedRequests { get; set; }
 
         public async Task OnGetAsync()
         {
             var userId = _userManager.GetUserId(User);
 
-            Requests = await _context.ServiceRequests
-                .Include(r => r.Mechanic)
-                .Where(r => r.UserId == userId)
+            CompletedRequests = await _context.ServiceRequests
+                 .Include(r => r.User)
+                .Where(r => r.MechanicUserId == userId && r.Status == "Completed")
                 .OrderByDescending(r => r.RequestDate)
                 .ToListAsync();
         }

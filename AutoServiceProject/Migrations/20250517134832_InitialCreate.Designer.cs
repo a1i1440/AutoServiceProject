@@ -4,6 +4,7 @@ using AutoServiceProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoServiceProject.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250517134832_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,6 +236,46 @@ namespace AutoServiceProject.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("AutoServiceProject.Models.ServiceRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CarBrand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SelectedMechanicId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SelectedService")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SelectedMechanicId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ServiceRequests");
                 });
 
             modelBuilder.Entity("AutoServiceProject.Models.SparePart", b =>
@@ -471,54 +514,6 @@ namespace AutoServiceProject.Migrations
                     b.ToTable("ServiceRecords");
                 });
 
-            modelBuilder.Entity("ServiceRequest", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CarBrand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MechanicUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("RequestDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SelectedMechanicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SelectedService")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MechanicUserId");
-
-                    b.HasIndex("SelectedMechanicId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ServiceRequests");
-                });
-
             modelBuilder.Entity("AutoServiceProject.Models.Order", b =>
                 {
                     b.HasOne("AutoServiceProject.Models.SparePart", "SparePart")
@@ -553,6 +548,25 @@ namespace AutoServiceProject.Migrations
                         .IsRequired();
 
                     b.Navigation("SparePart");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AutoServiceProject.Models.ServiceRequest", b =>
+                {
+                    b.HasOne("AutoServiceProject.Models.Mechanic", "Mechanic")
+                        .WithMany("ServiceRequests")
+                        .HasForeignKey("SelectedMechanicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AutoServiceProject.Models.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Mechanic");
 
                     b.Navigation("User");
                 });
@@ -632,31 +646,6 @@ namespace AutoServiceProject.Migrations
                         .HasForeignKey("VehicleId");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ServiceRequest", b =>
-                {
-                    b.HasOne("AutoServiceProject.Models.AppUser", "MechanicUser")
-                        .WithMany()
-                        .HasForeignKey("MechanicUserId");
-
-                    b.HasOne("AutoServiceProject.Models.Mechanic", "Mechanic")
-                        .WithMany("ServiceRequests")
-                        .HasForeignKey("SelectedMechanicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AutoServiceProject.Models.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Mechanic");
-
-                    b.Navigation("MechanicUser");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AutoServiceProject.Models.Customer", b =>

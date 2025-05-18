@@ -32,20 +32,20 @@
 
     <style>
         .nav-item.dropdown:hover .dropdown-menu {
-            display: block;
+        display: block;
         }
 
         .nav-link:hover {
-            color: black !important;
+        color: black !important;
         }
 
         .dropdown-item:hover {
-            background-color: black !important;
-            color: white !important;
+        background-color: black !important;
+        color: white !important;
         }
 
         .modal-content {
-            border-radius: 8px;
+        border-radius: 8px;
         }
     </style>
 
@@ -62,14 +62,16 @@
                         <i class="bi bi-tools me-2"></i>AutoService
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item"><a class="nav-link text-light" asp-page="/Index">Home</a></li>
-                            <li class="nav-item"><a class="nav-link text-light" asp-page="/Store/Index">Store</a></li>
-
+                            @if (User.IsInRole("User"))
+                            {
+                                <li class="nav-item"><a class="nav-link text-light" asp-page="/Store/Index">Store</a></li>
+                            }
                             @if (User.IsInRole("User"))
                             {
                                 <li class="nav-item">
@@ -97,6 +99,15 @@
                                     <a class="nav-link text-dark" asp-page="/Inventory/Index">Inventory</a>
                                 </li>
                             }
+                            @if (User.IsInRole("Mechanic"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Admin/Mechanics/Dashboard">Mechanic Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/Admin/Mechanics/Completed">Completed</a>
+                                </li>
+                            }
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
@@ -109,6 +120,13 @@
                                     <a class="nav-link text-dark" asp-page="/Admin/Mechanics/Index">Mechanics</a>
                                 </li>
                             }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-page="/Admin/Users">Users</a>
+                                </li>
+                            }
+
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">
@@ -171,8 +189,11 @@
     }
 
     <div id="floatingCart" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
-        <a href="/Store/Cart" class="btn btn-danger rounded-circle d-flex align-items-center justify-content-center position-relative" style="width: 60px; height: 60px;">
-            <i class="bi bi-cart3 fs-4 text-white"></i>
+        <a href="/Store/Cart"
+           class="btn btn-outline-dark d-flex align-items-center justify-content-center position-relative"
+           style="width: 60px; height: 60px; border-radius: 50%;">
+            <i class="bi bi-cart3 fs-4"></i>
+
             @if (cartItemCount > 0)
             {
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
@@ -237,6 +258,7 @@
     </div>
 
 
+
     <footer class="text-center text-muted mt-5" style="position: fixed; bottom: 10px; width: 100%;">
         © 2025 - AutoService - <a href="/Privacy" class="text-muted">Privacy</a>
     </footer>
@@ -248,6 +270,7 @@
 
     @await RenderSectionAsync("Scripts", required: false)
     <script src="~/js/site.js"></script>
-    
+
+
 </body>
 </html>

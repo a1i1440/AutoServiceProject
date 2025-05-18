@@ -1,9 +1,9 @@
 using AutoServiceProject.Data;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoServiceProject.Pages.Admin
 {
@@ -20,13 +20,23 @@ namespace AutoServiceProject.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            var allUsers = _userManager.Users.ToList();
-            var currentUser = await _userManager.GetUserAsync(User);
+            var currentUserId = _userManager.GetUserId(User);
 
-            Users = allUsers
-                .Where(u => u.Id != currentUser.Id) 
-                .ToList();
+            Users = await _userManager.Users
+                .Where(u => u.Id != currentUserId)
+                .ToListAsync();
         }
 
+
+        public async Task<IActionResult> OnPostTogglePremiumAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            user.IsPremium = !user.IsPremium;
+            await _userManager.UpdateAsync(user);
+            return RedirectToPage();
+        }
     }
 }

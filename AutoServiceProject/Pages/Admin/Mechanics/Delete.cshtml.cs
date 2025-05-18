@@ -3,6 +3,7 @@ using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
+using MechanicModel = AutoServiceProject.Models.Mechanic;
 
 namespace AutoServiceProject.Pages.Admin.Mechanics
 {
@@ -16,7 +17,7 @@ namespace AutoServiceProject.Pages.Admin.Mechanics
         }
 
         [BindProperty]
-        public Mechanic Mechanic { get; set; }
+        public MechanicModel Mechanic { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {

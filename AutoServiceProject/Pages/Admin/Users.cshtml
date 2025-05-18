@@ -4,24 +4,46 @@
     ViewData["Title"] = "Users";
 }
 
-<h3>İstifadəçilər</h3>
+<section class="py-5">
+    <div class="container">
+        <h3 class="fw-bold mb-4">👥 All Users</h3>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Ad Soyad</th>
-            <th>Email</th>
-            <th>Premium?</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.Users)
-        {
-            <tr>
-                <td>@user.FullName</td>
-                <td>@user.Email</td>
-                <td>@(user.IsPremium ? "✔️" : "❌")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <table class="table table-striped text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Premium</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.IsPremium)
+                            {
+                                <span class="badge bg-success">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No</span>
+                            }
+                        </td>
+                        <td>
+                            <form method="post" asp-page-handler="TogglePremium">
+                                <input type="hidden" name="UserId" value="@user.Id" />
+                                <button type="submit" class="btn btn-sm @(user.IsPremium ? "btn-danger" : "btn-success")">
+                                    @(user.IsPremium ? "Remove Premium" : "Make Premium")
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>

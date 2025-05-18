@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using MechanicModel = AutoServiceProject.Models.Mechanic;
 namespace AutoServiceProject.Pages.Admin.Mechanics
 {
     public class IndexModel : PageModel
@@ -16,7 +16,7 @@ namespace AutoServiceProject.Pages.Admin.Mechanics
             _context = context;
         }
 
-        public List<Mechanic> Mechanics { get; set; }
+        public List<MechanicModel> Mechanics { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -24,7 +24,7 @@ namespace AutoServiceProject.Pages.Admin.Mechanics
         }
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
-            var mechanic = await _context.Mechanics.FindAsync(id);
+            MechanicModel mechanic = await _context.Mechanics.FindAsync(id);
             if (mechanic != null)
             {
                 _context.Mechanics.Remove(mechanic);

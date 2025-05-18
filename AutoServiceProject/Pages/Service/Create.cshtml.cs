@@ -1,10 +1,13 @@
 using System.Text.Json;
 using AutoServiceProject.Data;
+using AutoServiceProject.Hubs;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using MechanicModel = AutoServiceProject.Models.Mechanic;
 
 namespace AutoServiceProject.Pages.Service
 {
@@ -13,10 +16,13 @@ namespace AutoServiceProject.Pages.Service
         private readonly AppDbContext _context;
         private readonly UserManager<AppUser> _userManager;
 
-        public CreateModel(AppDbContext context, UserManager<AppUser> userManager)
+        private readonly IHubContext<ServiceRequestHub> _hubContext;
+
+        public CreateModel(AppDbContext context, UserManager<AppUser> userManager, IHubContext<ServiceRequestHub> hubContext)
         {
             _context = context;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -36,7 +42,8 @@ namespace AutoServiceProject.Pages.Service
             "Other"
         };
 
-        public List<Mechanic> FilteredMechanics { get; set; } = new List<Mechanic>();
+        public List<MechanicModel> FilteredMechanics { get; set; } = new List<MechanicModel>();
+
 
         public async Task OnGetAsync()
         {
@@ -44,16 +51,17 @@ namespace AutoServiceProject.Pages.Service
             var json = System.IO.File.ReadAllText(jsonPath);
             CarBrands = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
             FilteredMechanics = await _context.Mechanics.ToListAsync();
+
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
             ServiceRequest.UserId = user.Id;
-
+            ServiceRequest.RequestDate = DateTime.Now;
             _context.ServiceRequests.Add(ServiceRequest);
             await _context.SaveChangesAsync();
-
+            await _hubContext.Clients.All.SendAsync("NewServiceRequest");
             return RedirectToPage("/Profile/MyServices");
         }
 
