@@ -72,9 +72,9 @@ namespace AutoServiceProject.Pages.Store
                 Quantity = quantity,
                 UserId = user.Id,
                 TotalPrice = part.Price * quantity,
-                Status = "Active",
+                Status = "Pending",
                 OrderDate = DateTime.Now,
-                Address = "Default Address"
+                Address = user.Address
             };
 
             _context.Orders.Add(order);

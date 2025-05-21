@@ -141,24 +141,6 @@ using (var scope = app.Services.CreateScope())
         await dbContext.SaveChangesAsync();
     }
 
-
-    var userEmail = "alimustafaev594@gmail.com";
-    var normalUser = await userManager.FindByEmailAsync(userEmail);
-    if (normalUser == null)
-    {
-        normalUser = new AppUser
-        {
-            UserName = userEmail,
-            Email = userEmail,
-            EmailConfirmed = true,
-            FullName = "Ali Mustafaev",
-            IsPremium = false,
-            Address = "User Address"
-        };
-
-        await userManager.CreateAsync(normalUser, "Ali123!");
-        await userManager.AddToRoleAsync(normalUser, "User");
-    }
 }
 
 

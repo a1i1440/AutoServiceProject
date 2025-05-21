@@ -56,7 +56,7 @@ namespace AutoServiceProject.Pages.Store
                     SparePartId = item.SparePartId,
                     Quantity = item.Quantity,
                     TotalPrice = item.Quantity * item.Price,
-                    Status = "Active",
+                    Status = "Pending",
                     OrderDate = DateTime.Now,
                     Address = Address
                 };

@@ -58,6 +58,7 @@ namespace AutoServiceProject.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+
             if (ModelState.IsValid)
             {
                 var user = new AppUser
@@ -69,32 +70,50 @@ namespace AutoServiceProject.Areas.Identity.Pages.Account
                     EmailConfirmed = false,
                     IsPremium = false
                 };
+
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
                     await _userManager.AddToRoleAsync(user, "User");
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        protocol: "http");
+
+                    var htmlMessage = $@"
+<p>Hello <strong>{user.FullName}</strong>,</p>
+<p>Thank you for registering at <strong>AutoService</strong>.</p>
+<p>Please confirm your email address by clicking the button below:</p>
+<div style='text-align:center;margin:20px 0;'>
+    <a href='{HtmlEncoder.Default.Encode(callbackUrl)}' style='padding:10px 20px;background:#28a745;color:#fff;text-decoration:none;border-radius:5px;'>Confirm Email</a>
+</div>
+<p>If you didn’t request this, you can ignore this email.</p>";
+
+                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email", htmlMessage);
+
                     return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl });
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
             return Page();
         }
+
         private IUserEmailStore<AppUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
