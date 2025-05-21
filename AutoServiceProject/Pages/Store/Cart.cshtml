@@ -38,8 +38,24 @@
             <div class="border p-4 rounded shadow-sm">
                 <form method="post" asp-page-handler="Checkout">
                     <div class="mb-3">
-                        <label for="address" class="form-label fw-semibold">Enter Your Address</label>
-                        <input type="text" class="form-control" id="address" name="Address" required />
+                        <label class="form-label fw-semibold">Select a saved address</label>
+                        <select class="form-select" name="SelectedAddressId" id="SelectedAddressId">
+                            <option value="">-- Choose address --</option>
+                            @foreach (var addr in Model.SavedAddresses)
+                            {
+                                <option value="@addr.Id">@addr.Title - @addr.FullAddress</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="toggleCustomAddress" onchange="toggleAddress()" />
+                        <label class="form-check-label" for="toggleCustomAddress">Write a new address</label>
+                    </div>
+
+                    <div class="mb-3" id="customAddressField" style="display: none;">
+                        <label class="form-label">Custom Address</label>
+                        <textarea class="form-control" name="CustomAddress" rows="3"></textarea>
                     </div>
 
                     <h5>Cart Summary</h5>
@@ -50,6 +66,16 @@
 
                     <button type="submit" class="btn btn-success w-100 mt-3">Proceed to Checkout</button>
                 </form>
+
+                @section Scripts {
+                    <script>
+                        function toggleAddress() {
+                            const isChecked = document.getElementById("toggleCustomAddress").checked;
+                            document.getElementById("customAddressField").style.display = isChecked ? "block" : "none";
+                        }
+                    </script>
+                }
+
             </div>
         </div>
     </div>

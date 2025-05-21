@@ -29,6 +29,32 @@ namespace AutoServiceProject.Pages.Profile
                 .Where(a => a.UserId == user.Id)
                 .ToListAsync();
         }
+        [BindProperty]
+        public Address EditAddress { get; set; }
+
+        public async Task<IActionResult> OnPostEditAsync()
+        {
+            var existing = await _context.Addresses.FindAsync(EditAddress.Id);
+            if (existing == null)
+                return NotFound();
+
+            existing.Title = EditAddress.Title;
+            existing.FullAddress = EditAddress.FullAddress;
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage();
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var address = await _context.Addresses.FindAsync(id);
+            if (address == null || address.UserId != _userManager.GetUserId(User))
+                return NotFound();
+
+            _context.Addresses.Remove(address);
+            await _context.SaveChangesAsync();
+            return RedirectToPage();
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {

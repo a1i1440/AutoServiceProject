@@ -39,14 +39,28 @@
                         <div class="list-group">
                             @foreach (var addr in Model.SavedAddresses)
                             {
-                                <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start flex-column shadow-sm rounded-3 mb-3">
-                                    <div class="mb-2">
-                                        <span class="fw-semibold text-dark">@addr.Title</span>
+                                <div class="list-group-item shadow-sm rounded-3 mb-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="fw-semibold text-dark">@addr.Title</div>
+                                        <div>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-primary me-1"
+                                                    onclick="openEditModal('@addr.Id', '@addr.Title', `@addr.FullAddress`)">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </button>
+
+                                            <form method="post" asp-page-handler="Delete" asp-route-id="@addr.Id" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                     <div class="text-muted small">@addr.FullAddress</div>
                                 </div>
                             }
                         </div>
+
                     }
                     else
                     {
@@ -57,3 +71,52 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="editAddressModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+            <form method="post" asp-page-handler="Edit">
+                <div class="modal-header bg-primary text-white rounded-top-4">
+                    <h5 class="modal-title fw-semibold">
+                        <i class="bi bi-pencil-square me-2"></i> Edit Address
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4 pt-4 pb-0">
+                    <input type="hidden" name="EditAddress.Id" id="edit-id" />
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Title</label>
+                        <input type="text" name="EditAddress.Title" id="edit-title" class="form-control" placeholder="e.g., Home, Work" required />
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Full Address</label>
+                        <textarea name="EditAddress.FullAddress" id="edit-fulladdress" class="form-control" rows="3" placeholder="Write full delivery address..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer px-4 pb-4 pt-2">
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="bi bi-check-circle me-1"></i> Save Changes
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function openEditModal(id, title, fullAddress) {
+            document.getElementById("edit-id").value = id;
+            document.getElementById("edit-title").value = title;
+            document.getElementById("edit-fulladdress").value = fullAddress;
+
+            var modal = new bootstrap.Modal(document.getElementById("editAddressModal"));
+            modal.show();
+        }
+    </script>
+}

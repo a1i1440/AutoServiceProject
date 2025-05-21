@@ -4,6 +4,7 @@ using AutoServiceProject.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace AutoServiceProject.Pages.Store
 {
@@ -20,10 +21,24 @@ namespace AutoServiceProject.Pages.Store
             _userManager = userManager;
         }
 
-        [BindProperty]
-        public string Address { get; set; }
-
         public List<CartItem> CartItems => _cartService.GetCartItems();
+
+        public List<Address> SavedAddresses { get; set; } = new();
+
+        [BindProperty]
+        public string SelectedAddressId { get; set; }
+
+        [BindProperty]
+        public string CustomAddress { get; set; }
+
+        public async Task OnGetAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            SavedAddresses = await _context.Addresses
+                .Where(a => a.UserId == user.Id)
+                .ToListAsync();
+        }
 
         public IActionResult OnPostRemove(int id)
         {
@@ -33,7 +48,7 @@ namespace AutoServiceProject.Pages.Store
 
         public async Task<IActionResult> OnPostCheckoutAsync()
         {
-            var userId = _userManager.GetUserId(User);
+            var user = await _userManager.GetUserAsync(User);
             var cartItems = _cartService.GetCartItems();
 
             if (!cartItems.Any())
@@ -42,23 +57,35 @@ namespace AutoServiceProject.Pages.Store
                 return RedirectToPage();
             }
 
-            if (string.IsNullOrWhiteSpace(Address))
+            string finalAddress;
+
+            if (!string.IsNullOrWhiteSpace(CustomAddress))
             {
-                TempData["Error"] = "Address is required.";
-                return RedirectToPage();
+                finalAddress = CustomAddress;
+            }
+            else if (!string.IsNullOrWhiteSpace(SelectedAddressId) && int.TryParse(SelectedAddressId, out var addrId))
+            {
+                var selected = await _context.Addresses.FindAsync(addrId);
+                finalAddress = selected?.FullAddress ?? "Unknown Address";
+            }
+            else
+            {
+                TempData["Error"] = "Please select or write an address.";
+                await OnGetAsync();
+                return Page();
             }
 
             foreach (var item in cartItems)
             {
                 var order = new Order
                 {
-                    UserId = userId,
+                    UserId = user.Id,
                     SparePartId = item.SparePartId,
                     Quantity = item.Quantity,
                     TotalPrice = item.Quantity * item.Price,
                     Status = "Pending",
                     OrderDate = DateTime.Now,
-                    Address = Address
+                    Address = finalAddress
                 };
 
                 _context.Orders.Add(order);
