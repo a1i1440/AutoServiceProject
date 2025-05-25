@@ -114,43 +114,44 @@ namespace AutoServiceProject.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var user = await _userManager.FindByEmailAsync(Input.Email);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "❌ This email is not registered.");
+                    return Page();
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
 
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-
                     if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
                         return RedirectToPage("/Admin/Dashboard");
-                    }
-                    else
-                    {
-                        return RedirectToPage("/Index");
 
-                    }
+                    return RedirectToPage("/Index");
                 }
-
 
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+
+                ModelState.AddModelError(string.Empty, "❌ Incorrect password.");
+                return Page();
             }
 
             return Page();
         }
+
 
     }
 }

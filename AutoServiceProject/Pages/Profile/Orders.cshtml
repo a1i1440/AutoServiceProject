@@ -7,7 +7,6 @@
 <h2 class="mb-4">My Orders</h2>
 
 <div class="d-flex justify-content-center gap-3 mb-4">
-
     <button class="btn btn-outline-dark status-filter-btn active" data-status="all">All</button>
     <button class="btn btn-outline-success status-filter-btn" data-status="Completed">Completed</button>
     <button class="btn btn-outline-danger status-filter-btn" data-status="Cancelled">Cancelled</button>
@@ -45,7 +44,13 @@
 
                         @if (order.Status == "Pending" || order.Status == "Active")
                         {
-                            <a class="btn btn-outline-dark w-100 mb-2" asp-page-handler="Edit" asp-route-id="@order.Id">Edit</a>
+                            <a href="#" class="btn btn-outline-dark w-100 mb-2"
+                               data-bs-toggle="modal"
+                               data-bs-target="#editOrderModal"
+                               data-id="@order.Id"
+                               data-quantity="@order.Quantity"
+                               data-address="@order.Address">Edit</a>
+
                             <form method="post" asp-page-handler="Cancel" asp-route-id="@order.Id">
                                 <button type="submit" class="btn btn-outline-danger w-100">Cancel</button>
                             </form>
@@ -57,9 +62,40 @@
     }
 </div>
 
+<!-- Edit Modal -->
+<div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" asp-page-handler="Edit">
+                <div class="modal-body">
+                    <input asp-for="OrderInput.Id" type="hidden" id="Order_Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="OrderInput.Quantity" class="form-label"></label>
+                        <input asp-for="OrderInput.Quantity" class="form-control" id="Order_Quantity" />
+                        <span asp-validation-for="OrderInput.Quantity" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="OrderInput.Address" class="form-label"></label>
+                        <input asp-for="OrderInput.Address" class="form-control" id="Order_Address" />
+                        <span asp-validation-for="OrderInput.Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-dark">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
     <script>
         document.querySelectorAll('.status-filter-btn').forEach(btn => {
             btn.addEventListener('click', function () {
@@ -71,6 +107,14 @@
                     const status = card.getAttribute('data-status');
                     card.style.display = (selected === "all" || selected === status) ? "block" : "none";
                 });
+            });
+        });
+
+        document.querySelectorAll('a[data-bs-target="#editOrderModal"]').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById("Order_Id").value = this.dataset.id;
+                document.getElementById("Order_Quantity").value = this.dataset.quantity;
+                document.getElementById("Order_Address").value = this.dataset.address;
             });
         });
     </script>

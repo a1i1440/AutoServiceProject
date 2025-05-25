@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoServiceProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AutoServiceProject.Pages.Profile
 {
@@ -25,15 +26,20 @@ namespace AutoServiceProject.Pages.Profile
         [BindProperty]
         public OrderInputModel OrderInput { get; set; }
 
+        public async Task OnGetAsync()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            Orders = await _context.Orders
+                .Include(o => o.SparePart)
+                .Where(o => o.UserId == user.Id)
+                .ToListAsync();
+        }
+
         public async Task<IActionResult> OnPostEditAsync()
         {
-            Console.WriteLine($"📦 ID: {OrderInput?.Id}, Quantity: {OrderInput?.Quantity}, Address: {OrderInput?.Address}");
-
             if (!ModelState.IsValid)
-            {
-                Console.WriteLine("❌ ModelState invalid!");
                 return RedirectToPage();
-            }
 
             var existing = await _context.Orders.FindAsync(OrderInput.Id);
             if (existing == null || existing.Status != "Pending")
@@ -43,9 +49,9 @@ namespace AutoServiceProject.Pages.Profile
             existing.Address = OrderInput.Address;
 
             await _context.SaveChangesAsync();
-            Console.WriteLine("✅ Updated successfully.");
             return RedirectToPage();
         }
+
         public async Task<IActionResult> OnPostCancelAsync(int id)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -63,14 +69,15 @@ namespace AutoServiceProject.Pages.Profile
             return RedirectToPage();
         }
 
-        public async Task OnGetAsync()
+        public class OrderInputModel
         {
-            var user = await _userManager.GetUserAsync(User);
+            public int Id { get; set; }
 
-            Orders = await _context.Orders
-                .Include(o => o.SparePart)
-                .Where(o => o.UserId == user.Id)
-                .ToListAsync();
+            [Range(1, 100)]
+            public int Quantity { get; set; }
+
+            [Required]
+            public string Address { get; set; }
         }
     }
 }

@@ -107,6 +107,9 @@
                                     <a class="nav-link dropdown-toggle text-dark" href="#" id="ordersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Orders
                                     </a>
+                                
+                                    
+                                
                                     <ul class="dropdown-menu" aria-labelledby="ordersDropdown">
                                         <li><a class="dropdown-item" asp-page="/Admin/PendingOrders">Pending Orders</a></li>
                                         <li><a class="dropdown-item" asp-page="/Admin/Orders">Active Orders</a></li>
@@ -117,6 +120,10 @@
                                 <li class="nav-item"><a class="nav-link text-dark" asp-page="/Admin/Dashboard">Admin Panel</a></li>
                                 <li class="nav-item"><a class="nav-link text-dark" asp-page="/Admin/Mechanics/Index">Mechanics</a></li>
                                 <li class="nav-item"><a class="nav-link text-dark" asp-page="/Admin/Users">Users</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-page="/Admin/Receipts">Receipts</a>
+                                </li>
+
                                 <li class="nav-item"><a class="nav-link text-dark" asp-page="/Admin/ServiceRequests">Service Requests</a></li>
                             }
                             @if (User.IsInRole("Mechanic"))
