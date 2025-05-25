@@ -1,0 +1,65 @@
+﻿@page
+@model AutoServiceProject.Pages.Inventory.OutOfStockModel
+@{
+    ViewData["Title"] = "Out of Stock";
+}
+
+<section class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-header bg-danger text-white rounded-top-4">
+                    <h4 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i> Out of Stock Products</h4>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (!Model.Parts.Any())
+                    {
+                        <div class="text-center text-muted py-5">
+                            <i class="bi bi-check-circle display-4 text-success"></i>
+                            <h5 class="mt-3">All products are currently in stock.</h5>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Brand</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var part in Model.Parts)
+                                    {
+                                        <tr>
+                                            <td style="width: 80px;">
+                                                <img src="@part.ImageUrl" class="img-fluid rounded shadow-sm" style="max-height: 60px;" />
+                                            </td>
+                                            <td>@part.Name</td>
+                                            <td>@part.Brand</td>
+                                            <td>@part.Category</td>
+                                            <td class="text-danger fw-semibold">$@part.Price.ToString("0.00")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+
+                <div class="card-footer text-end bg-light rounded-bottom-4">
+                    <a asp-page="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Inventory
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

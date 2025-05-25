@@ -92,78 +92,112 @@
             <a href="#spare-parts" class="btn btn-danger">Shop Now</a>
         </div>
         <div class="row g-4">
+
             <div class="col-6 col-md-3 text-center">
-                <div class="card border-0 h-100">
-                    <img src="/images/body-parts.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Body Parts">
-                    <div class="card-body p-2" style="background-color: #f1f1f1;">
-                        <h6 class="card-title m-0">Body Parts</h6>
+                <a href="/Store/Category/Body-Parts" class="text-decoration-none text-dark">
+                    <div class="card border-0 h-100">
+                        <img src="/images/body-parts.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Body Parts">
+                        <div class="card-body p-2" style="background-color: #f1f1f1;">
+                            <h6 class="card-title m-0">Body Parts</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+
             <div class="col-6 col-md-3 text-center">
-                <div class="card border-0 h-100">
-                    <img src="/images/headlights.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Headlights & Lighting">
-                    <div class="card-body p-2" style="background-color: #f1f1f1;">
-                        <h6 class="card-title m-0">Headlights & Lighting</h6>
+                <a href="/Store/Category/Headlights-Lighting" class="text-decoration-none text-dark">
+                    <div class="card border-0 h-100">
+                        <img src="/images/headlights.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Headlights & Lighting">
+                        <div class="card-body p-2" style="background-color: #f1f1f1;">
+                            <h6 class="card-title m-0">Headlights & Lighting</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+
             <div class="col-6 col-md-3 text-center">
-                <div class="card border-0 h-100">
-                    <img src="/images/brakes.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Brakes & Suspension">
-                    <div class="card-body p-2" style="background-color: #f1f1f1;">
-                        <h6 class="card-title m-0">Brakes & Suspension</h6>
+                <a href="/Store/Category/Brakes-Suspension" class="text-decoration-none text-dark">
+                    <div class="card border-0 h-100">
+                        <img src="/images/brakes.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Brakes & Suspension">
+                        <div class="card-body p-2" style="background-color: #f1f1f1;">
+                            <h6 class="card-title m-0">Brakes & Suspension</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+
             <div class="col-6 col-md-3 text-center">
-                <div class="card border-0 h-100">
-                    <img src="/images/engine.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Engine & Drivetrain">
-                    <div class="card-body p-2" style="background-color: #f1f1f1;">
-                        <h6 class="card-title m-0">Engine & Drivetrain</h6>
+                <a href="/Store/Category/Engine-Drivetrain" class="text-decoration-none text-dark">
+                    <div class="card border-0 h-100">
+                        <img src="/images/engine.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Engine & Drivetrain">
+                        <div class="card-body p-2" style="background-color: #f1f1f1;">
+                            <h6 class="card-title m-0">Engine & Drivetrain</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+
             <div class="col-6 col-md-3 text-center">
-                <div class="card border-0 h-100">
-                    <img src="/images/tools.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Tools & Garage">
-                    <div class="card-body p-2" style="background-color: #f1f1f1;">
-                        <h6 class="card-title m-0">Tools & Garage</h6>
+                <a href="/Store/Category/Tools-Garage" class="text-decoration-none text-dark">
+                    <div class="card border-0 h-100">
+                        <img src="/images/tools.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Tools & Garage">
+                        <div class="card-body p-2" style="background-color: #f1f1f1;">
+                            <h6 class="card-title m-0">Tools & Garage</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+
             <div class="col-6 col-md-3 text-center">
-                <div class="card border-0 h-100">
-                    <img src="/images/interior.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Interior Parts">
-                    <div class="card-body p-2" style="background-color: #f1f1f1;">
-                        <h6 class="card-title m-0">Interior Parts</h6>
+                <a href="/Store/Category/Interior-Parts" class="text-decoration-none text-dark">
+                    <div class="card border-0 h-100">
+                        <img src="/images/interior.jpg" class="card-img-top p-3" style="height: 150px; object-fit: contain;" alt="Interior Parts">
+                        <div class="card-body p-2" style="background-color: #f1f1f1;">
+                            <h6 class="card-title m-0">Interior Parts</h6>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
+
         </div>
     </div>
 </section>
+
 
 <section class="py-5" id="spare-parts">
     <div class="container">
         <h3 class="text-center mb-5">Spare Parts</h3>
         <div class="row g-4">
-            @foreach (var product in Model.Products)
+            @if (Model.Products.Any())
             {
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="border rounded shadow-sm h-100 p-3">
-                        <a asp-page="/Store/Details" asp-route-id="@product.Id">
-                            <img src="@product.ImageUrl" class="w-100" style="height: 150px; object-fit: contain;" alt="@product.Name">
-                        </a>
-                        <div class="mt-3">
-                            <h6 class="fw-bold">@product.Name</h6>
-                            <p class="text-muted mb-1">@product.Brand</p>
-                            <p class="fw-bold">@product.Price.ToString("C")</p>
-                            <a class="btn btn-outline-dark w-100" asp-page="/Store/Details" asp-route-id="@product.Id">View Details</a>
+                foreach (var product in Model.Products)
+                {
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card product-card shadow-sm border-0 h-100">
+
+                            <a asp-page="/Store/Details" asp-route-id="@product.Id">
+                                <img src="@product.ImageUrl" class="w-100" style="height: 150px; object-fit: contain;" alt="@product.Name">
+                            </a>
+                            <div class="mt-3">
+                                <h6 class="fw-bold">@product.Name</h6>
+                                <p class="text-muted mb-1">@product.Brand</p>
+                                <p class="fw-bold">@product.Price.ToString("C")</p>
+                                <a class="btn btn-outline-dark w-100" asp-page="/Store/Details" asp-route-id="@product.Id">View Details</a>
+                            </div>
                         </div>
                     </div>
+                }
+            }
+            else
+            {
+                <div class="text-center text-muted py-5 w-100">
+                    <i class="bi bi-emoji-frown fs-1 mb-3 d-block"></i>
+                    <h5>No products found in this category.</h5>
+                    <p>Please try another category or reset your filters.</p>
                 </div>
             }
+
+
         </div>
     </div>
 </section>

@@ -46,6 +46,22 @@ namespace AutoServiceProject.Pages.Profile
             Console.WriteLine("✅ Updated successfully.");
             return RedirectToPage();
         }
+        public async Task<IActionResult> OnPostCancelAsync(int id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var order = await _context.Orders
+                .Include(o => o.SparePart)
+                .FirstOrDefaultAsync(o => o.Id == id && o.UserId == user.Id);
+
+            if (order == null || order.Status != "Pending")
+                return RedirectToPage();
+
+            order.SparePart.Quantity += order.Quantity;
+            order.Status = "Cancelled";
+
+            await _context.SaveChangesAsync();
+            return RedirectToPage();
+        }
 
         public async Task OnGetAsync()
         {

@@ -1,0 +1,85 @@
+﻿@page "/Store/Category/{categoryName}"
+@model AutoServiceProject.Pages.Store.CategoryModel
+@{
+    ViewData["Title"] = Model.CategoryName;
+}
+
+<section class="py-5" style="background-color: #f4f6f9;">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5 display-6">@Model.CategoryName</h2>
+
+        @if (Model.Products.Any())
+        {
+            <div class="row g-4">
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card shadow-sm border-0 h-100 product-card">
+                            <a asp-page="/Store/Details" asp-route-id="@product.Id">
+                                <img src="@product.ImageUrl" class="card-img-top img-fluid" alt="@product.Name" />
+                            </a>
+                            <div class="card-body text-center">
+                                <h6 class="fw-bold">@product.Name</h6>
+                                <p class="text-muted small mb-1">@product.Brand</p>
+                                <p class="fw-semibold text-danger mb-2">@product.Price.ToString("C")</p>
+                                <a class="btn btn-outline-dark btn-sm w-100" asp-page="/Store/Details" asp-route-id="@product.Id">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-emoji-frown fs-1 mb-3 d-block"></i>
+                <h5>No products found in this category.</h5>
+                <p>Try browsing other categories.</p>
+                <a href="/Store" class="btn btn-outline-secondary mt-3">
+                    <i class="bi bi-arrow-left-circle me-1"></i> Back to Store
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<style>
+    .product-card {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 0 rgba(0,0,0,0.0);
+        transition: all 0.3s ease;
+        border: 1px solid #dee2e6;
+    }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            border-color: transparent;
+        }
+
+        .product-card .card-body {
+            border-top: 1px solid #eee;
+        }
+
+        .product-card .btn {
+            transition: 0.3s ease;
+        }
+
+            .product-card .btn:hover {
+                background-color: #212529;
+                color: #fff;
+            }
+
+        .product-card img {
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            height: 180px;
+            object-fit: contain;
+            width: 100%;
+        }
+</style>

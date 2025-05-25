@@ -77,6 +77,16 @@ namespace AutoServiceProject.Pages.Store
 
             foreach (var item in cartItems)
             {
+                var part = await _context.Parts.FindAsync(item.SparePartId);
+
+                if (part == null || part.Quantity < item.Quantity)
+                {
+                    TempData["Error"] = $"Not enough stock for {item.Name}.";
+                    return RedirectToPage();
+                }
+
+                part.Quantity -= item.Quantity;
+
                 var order = new Order
                 {
                     UserId = user.Id,
@@ -90,6 +100,7 @@ namespace AutoServiceProject.Pages.Store
 
                 _context.Orders.Add(order);
             }
+
 
             _cartService.ClearCart();
             await _context.SaveChangesAsync();

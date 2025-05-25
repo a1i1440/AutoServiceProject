@@ -1,0 +1,21 @@
+﻿@page "/Profile/Receipt/{orderId:int}"
+@model AutoServiceProject.Pages.Profile.ReceiptModel
+@{
+    ViewData["Title"] = "Receipt";
+}
+
+<div class="container py-5">
+    <div class="card p-4 shadow-sm no-hover">
+        <h3 class="mb-4">🧾 Receipt - Order #@Model.Order.Id</h3>
+
+        <p><strong>Product:</strong> @Model.Order.SparePart.Name</p>
+        <p><strong>Brand:</strong> @Model.Order.SparePart.Brand</p>
+        <p><strong>Quantity:</strong> @Model.Order.Quantity</p>
+        <p><strong>Total Price:</strong> @Model.Order.TotalPrice.ToString("C")</p>
+        <p><strong>Address:</strong> @Model.Order.Address</p>
+        <p><strong>Status:</strong> @Model.Order.Status</p>
+        <p><strong>Date:</strong> @Model.Order.OrderDate.ToString("f")</p>
+
+        <a href="/Profile/Orders" class="btn btn-secondary mt-4">← Back to Orders</a>
+    </div>
+</div>

@@ -79,6 +79,12 @@ namespace AutoServiceProject.Pages.Store
             var part = _context.Parts.FirstOrDefault(p => p.Id == id);
             if (part == null) return NotFound();
 
+            if (part.Quantity < quantity)
+            {
+                TempData["CartAdded"] = "OutOfStock";
+                return RedirectToPage(new { id });
+            }
+
             var item = new CartItem
             {
                 SparePartId = part.Id,
@@ -89,9 +95,10 @@ namespace AutoServiceProject.Pages.Store
             };
 
             _cartService.AddToCart(item);
-            TempData["CartAdded"] = true;
+            TempData["CartAdded"] = "Success";
             return RedirectToPage(new { id });
         }
+
 
     }
 }

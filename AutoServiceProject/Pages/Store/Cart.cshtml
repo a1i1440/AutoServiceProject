@@ -6,6 +6,16 @@
     var shipping = 5.00m;
     var total = subtotal + shipping;
 }
+@if (TempData["Error"] != null && Model.CartItems.Any())
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+}
+
 
 <div class="container py-5">
     <div class="row">
@@ -13,8 +23,22 @@
             <h4>Your Shopping Cart</h4>
             @if (!Model.CartItems.Any())
             {
-                <p>Your cart is empty.</p>
+                <div class="container py-5">
+                    <div class="row justify-content-end">
+                        <div class="col-md-6 text-center">
+                            <img src="/images/empty-cart.png" alt="Empty Cart" style="max-width: 180px;" class="mb-4" />
+                            <h4 class="fw-bold text-muted">Your cart is empty</h4>
+                            <p class="text-muted mb-4">Looks like you haven’t added anything to your cart yet.</p>
+                            <a href="/Store" class="btn btn-outline-danger px-4 py-2">
+                                <i class="bi bi-arrow-left-circle me-2"></i> Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
             }
+
+
+
             else
             {
                 @foreach (var item in Model.CartItems)
@@ -33,7 +57,8 @@
                 }
             }
         </div>
-
+        @if (Model.CartItems.Any())
+{
         <div class="col-md-4">
             <div class="border p-4 rounded shadow-sm">
                 <form method="post" asp-page-handler="Checkout">
@@ -78,5 +103,7 @@
 
             </div>
         </div>
+        }
     </div>
-</div>
+    </div>
+        
